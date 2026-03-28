@@ -41,9 +41,12 @@ Route::prefix('demo')->group(function () {
     Route::get('/reports', [DemoController::class, 'reports'])->name('demo.reports');
 });
 
-// Super Admin Dashboard
+// Super Admin
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/tenants', fn () => view('admin.tenants'))->name('admin.tenants');
+    Route::get('/users', fn () => view('admin.users'))->name('admin.users');
+    Route::get('/settings', fn () => view('admin.settings'))->name('admin.settings');
 });
 
 // Fund Management (tenant-scoped)
