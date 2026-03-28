@@ -4,42 +4,101 @@
 <div class="prose prose-invert max-w-none">
     <p class="text-lg text-gray-300 mb-8">
         หน้านี้จะแนะนำวิธีดูตารางผ่อนชำระของสัญญาสินเชื่อ
-        เพื่อตรวจสอบว่าสมาชิกต้องจ่ายงวดละเท่าไหร่ และจ่ายไปแล้วกี่งวด
+        เพื่อตรวจสอบว่าสมาชิกต้องจ่ายงวดละเท่าไหร่ จ่ายไปแล้วกี่งวด และเหลืออีกเท่าไหร่
+        ทุกข้อมูลระบบคำนวณให้อัตโนมัติ ไม่ต้องคิดเลขเอง
     </p>
 
     <x-guide-step :number="1" title="เปิดสัญญาสินเชื่อ">
-        <p>เข้าเมนู <strong>"สินเชื่อ"</strong> แล้วคลิกเลือกสัญญาที่ต้องการดูตารางผ่อนชำระ</p>
-        <x-guide-screenshot src="images/guide/loans/select-loan-for-schedule.png" alt="เลือกสัญญาสินเชื่อ" caption="คลิกเลือกสัญญาที่ต้องการดูตารางผ่อน" />
+        <p>เข้าเมนู <strong>"สินเชื่อ"</strong> ในแถบด้านซ้ายมือ แล้วคลิกเลือกสัญญาที่ต้องการดูตารางผ่อนชำระ</p>
+        <p>สามารถค้นหาโดยพิมพ์ชื่อสมาชิกหรือรหัสสัญญาในช่องค้นหา</p>
+        <x-guide-screenshot src="images/guide/loans/select-loan-for-schedule.png" alt="เลือกสัญญาสินเชื่อ" caption="คลิกเลือกสัญญาที่ต้องการดูตารางผ่อนชำระ" />
     </x-guide-step>
 
-    <x-guide-step :number="2" title="คลิกดูตารางผ่อนชำระ">
-        <p>ในหน้ารายละเอียดสัญญา ให้คลิกที่แถบ <strong>"ตารางผ่อนชำระ"</strong> ระบบจะแสดงตารางทุกงวดที่ต้องชำระ</p>
-        <x-guide-screenshot src="images/guide/loans/tab-payment-schedule.png" alt="แถบตารางผ่อนชำระ" caption="คลิกแถบ &quot;ตารางผ่อนชำระ&quot; เพื่อดูรายละเอียด" />
-    </x-guide-step>
-
-    <x-guide-step :number="3" title="อ่านตารางผ่อนชำระ">
-        <p>ตารางจะแสดงข้อมูลแต่ละงวดดังนี้:</p>
+    <x-guide-step :number="2" title="ดูข้อมูลสรุปสัญญา">
+        <p>ที่ด้านบนของหน้ารายละเอียดสัญญา จะแสดง <strong>ข้อมูลสรุป</strong> ที่สำคัญ:</p>
         <ul class="list-disc list-inside space-y-2 my-4">
-            <li><strong>งวดที่</strong> - ลำดับงวดการชำระ</li>
-            <li><strong>วันครบกำหนด</strong> - วันที่ต้องชำระเงินในแต่ละงวด</li>
-            <li><strong>เงินต้น</strong> - ส่วนที่เป็นเงินต้นในงวดนั้น</li>
-            <li><strong>ดอกเบี้ย</strong> - ส่วนที่เป็นดอกเบี้ยในงวดนั้น</li>
-            <li><strong>รวมต้องชำระ</strong> - ยอดรวมที่ต้องจ่ายในงวดนั้น</li>
-            <li><strong>ยอดคงเหลือ</strong> - เงินต้นที่เหลืออยู่หลังชำระงวดนั้น</li>
+            <li><strong>ยอดเงินกู้ทั้งหมด</strong> - จำนวนเงินที่สมาชิกกู้ตอนแรก</li>
+            <li><strong>ยอดชำระแล้ว</strong> - จำนวนเงินรวมที่สมาชิกจ่ายมาแล้ว (เงินต้น + ดอกเบี้ย)</li>
+            <li><strong>ยอดคงเหลือ</strong> - จำนวนเงินต้นที่ยังเหลือต้องจ่าย</li>
+            <li><strong>แถบความคืบหน้า (progress bar)</strong> - แถบสีเขียวแสดงว่าจ่ายไปแล้วกี่เปอร์เซ็นต์ของทั้งหมด ถ้าเขียวเต็มแถบ = ชำระครบแล้ว</li>
+            <li><strong>จำนวนงวดที่ชำระแล้ว / ทั้งหมด</strong> - เช่น "5/12 งวด" หมายถึง จ่ายไปแล้ว 5 งวดจากทั้งหมด 12 งวด</li>
         </ul>
-        <x-guide-screenshot src="images/guide/loans/payment-schedule-table.png" alt="ตารางผ่อนชำระ" caption="ตารางแสดงรายละเอียดทุกงวด" />
-    </x-guide-step>
-
-    <x-guide-step :number="4" title="สังเกตสีสถานะของแต่ละงวด">
-        <p>แต่ละงวดจะมีสีบอกสถานะให้เข้าใจง่าย:</p>
-        <ul class="list-disc list-inside space-y-2 my-4">
-            <li><span class="inline-block w-4 h-4 bg-yellow-500 rounded mr-2 align-middle"></span><strong>สีเหลือง = รอชำระ</strong> - ยังไม่ถึงกำหนดหรือรอสมาชิกมาจ่าย</li>
-            <li><span class="inline-block w-4 h-4 bg-green-500 rounded mr-2 align-middle"></span><strong>สีเขียว = ชำระแล้ว</strong> - สมาชิกจ่ายเงินเรียบร้อยแล้ว</li>
-            <li><span class="inline-block w-4 h-4 bg-red-500 rounded mr-2 align-middle"></span><strong>สีแดง = เลยกำหนด</strong> - เลยวันที่ต้องจ่ายแล้วแต่ยังไม่ได้ชำระ</li>
-        </ul>
-        <x-guide-screenshot src="images/guide/loans/schedule-status-colors.png" alt="สีสถานะงวดผ่อน" caption="สีเหลือง=รอ สีเขียว=ชำระแล้ว สีแดง=เลยกำหนด" />
         <x-guide-tip type="tip">
-            ถ้าเห็นงวดสีแดง แสดงว่าสมาชิกค้างชำระ ควรติดต่อแจ้งเตือนโดยเร็ว
+            ข้อมูลสรุปนี้ช่วยให้เห็นภาพรวมของสัญญาได้เร็วโดยไม่ต้องนับทีละงวด
+        </x-guide-tip>
+    </x-guide-step>
+
+    <x-guide-step :number="3" title="คลิกดูตารางผ่อนชำระ">
+        <p>ในหน้ารายละเอียดสัญญา ให้คลิกที่แถบ <strong>"ตารางผ่อนชำระ"</strong></p>
+        <p>ระบบจะแสดงตารางที่มีทุกงวดตั้งแต่งวดแรกจนถึงงวดสุดท้าย</p>
+        <x-guide-screenshot src="images/guide/loans/tab-payment-schedule.png" alt="แถบตารางผ่อนชำระ" caption="คลิกแถบ &quot;ตารางผ่อนชำระ&quot; เพื่อดูรายละเอียดทุกงวด" />
+        <x-guide-tip type="info">
+            ตารางผ่อนชำระถูกสร้างอัตโนมัติตอนที่สร้างสัญญา ระบบคำนวณเงินต้นและดอกเบี้ยแต่ละงวดให้เรียบร้อย ไม่ต้องคิดเลขเอง
+        </x-guide-tip>
+    </x-guide-step>
+
+    <x-guide-step :number="4" title="อ่านตารางผ่อนชำระ - อธิบายทุกคอลัมน์">
+        <p>ตารางมีหลายคอลัมน์ แต่ละคอลัมน์มีความหมายดังนี้:</p>
+        <ul class="list-disc list-inside space-y-3 my-4">
+            <li>
+                <strong>งวดที่</strong> - ลำดับการชำระ เช่น งวดที่ 1 คืองวดแรก งวดที่ 12 คืองวดสุดท้าย (ถ้าผ่อน 12 งวด)
+            </li>
+            <li>
+                <strong>วันครบกำหนด</strong> - วันที่สมาชิกต้องมาจ่ายเงินในแต่ละงวด เช่น 15 ก.พ. 2569 ถ้าเลยวันนี้แล้วยังไม่จ่ายก็ถือว่าเลยกำหนด
+            </li>
+            <li>
+                <strong>เงินต้น</strong> - ส่วนของเงินที่จ่ายเพื่อหักจากยอดเงินกู้ ยิ่งจ่ายเงินต้นมาก ยอดหนี้ยิ่งลดลง
+            </li>
+            <li>
+                <strong>ดอกเบี้ย</strong> - ส่วนของเงินที่จ่ายเป็นค่าตอบแทนการกู้เงิน เป็นรายได้ของกองทุน ไม่ได้หักจากยอดหนี้
+            </li>
+            <li>
+                <strong>รวม</strong> - เงินต้น + ดอกเบี้ย = จำนวนเงินทั้งหมดที่ต้องจ่ายในงวดนั้น นี่คือตัวเลขที่ต้องเก็บจากสมาชิก
+            </li>
+            <li>
+                <strong>สถานะ</strong> - บอกว่างวดนั้นจ่ายแล้วหรือยัง ดูรายละเอียดในขั้นตอนถัดไป
+            </li>
+        </ul>
+        <x-guide-screenshot src="images/guide/loans/payment-schedule-table.png" alt="ตารางผ่อนชำระ" caption="ตารางแสดงรายละเอียดทุกงวด พร้อมเงินต้น ดอกเบี้ย และยอดรวม" />
+    </x-guide-step>
+
+    <x-guide-step :number="5" title="สังเกตสีสถานะของแต่ละงวด">
+        <p>แต่ละงวดจะมี <strong>สีบอกสถานะ</strong> ให้เข้าใจได้ทันที โดยไม่ต้องอ่านรายละเอียด:</p>
+        <ul class="list-disc list-inside space-y-3 my-4">
+            <li>
+                <span class="inline-block w-4 h-4 bg-green-500 rounded mr-2 align-middle"></span>
+                <strong>สีเขียว = ชำระแล้ว</strong> - สมาชิกจ่ายเงินครบแล้วในงวดนั้น จะแสดง "วันที่ชำระจริง" กำกับไว้ด้วย
+            </li>
+            <li>
+                <span class="inline-block w-4 h-4 bg-yellow-500 rounded mr-2 align-middle"></span>
+                <strong>สีเหลือง = รอชำระ</strong> - ยังไม่ถึงวันครบกำหนด รอสมาชิกมาจ่ายตามกำหนด
+            </li>
+            <li>
+                <span class="inline-block w-4 h-4 bg-red-500 rounded mr-2 align-middle"></span>
+                <strong>สีแดง = เลยกำหนด</strong> - เลยวันที่ต้องจ่ายแล้วแต่สมาชิกยังไม่ได้ชำระ ต้องติดตามทวงถามโดยเร็ว
+            </li>
+            <li>
+                <span class="inline-block w-4 h-4 bg-blue-500 rounded mr-2 align-middle"></span>
+                <strong>สีน้ำเงิน = ชำระบางส่วน</strong> - สมาชิกจ่ายเงินมาแล้วแต่ไม่ครบยอดงวด ยังเหลือยอดค้างอยู่ในงวดนั้น
+            </li>
+        </ul>
+        <x-guide-screenshot src="images/guide/loans/schedule-status-colors.png" alt="สีสถานะงวดผ่อน" caption="เขียว=ชำระแล้ว เหลือง=รอชำระ แดง=เลยกำหนด น้ำเงิน=ชำระบางส่วน" />
+        <x-guide-tip type="warning">
+            ถ้าเห็นงวดสีแดง (เลยกำหนด) แสดงว่าสมาชิกค้างชำระ ควรติดต่อแจ้งเตือนทันที อย่าปล่อยให้ค้างนาน เพราะยิ่งค้างนานยิ่งยากที่จะเก็บเงินได้ครบ
+        </x-guide-tip>
+    </x-guide-step>
+
+    <x-guide-step :number="6" title="คลิกดูรายละเอียดการชำระแต่ละงวด">
+        <p>สำหรับงวดที่ชำระแล้ว (สีเขียว) สามารถคลิกที่แถวนั้นเพื่อดูรายละเอียดเพิ่มเติม:</p>
+        <ul class="list-disc list-inside space-y-2 my-4">
+            <li><strong>วันที่ชำระจริง</strong> - วันที่สมาชิกมาจ่ายเงิน</li>
+            <li><strong>จำนวนเงินที่ชำระ</strong> - ยอดเงินที่จ่ายมา</li>
+            <li><strong>ช่องทางรับเงิน</strong> - เงินสดหรือโอนธนาคาร</li>
+            <li><strong>เลขที่ใบเสร็จ</strong> - ถ้ามีการบันทึกไว้</li>
+            <li><strong>ผู้บันทึก</strong> - ชื่อเจ้าหน้าที่ที่รับชำระ</li>
+        </ul>
+        <x-guide-tip type="tip">
+            ข้อมูลนี้มีประโยชน์เวลาต้องตรวจสอบย้อนหลัง เช่น สมาชิกสงสัยว่าจ่ายเงินไปแล้วหรือยัง ก็เปิดดูได้ทันที
         </x-guide-tip>
     </x-guide-step>
 </div>
