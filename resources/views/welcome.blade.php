@@ -7,8 +7,7 @@
     <meta name="description" content="ระบบบริหารกองทุนหมู่บ้านออนไลน์ จัดการบัญชี สินเชื่อ เงินฝาก หุ้น รายงานการเงิน ฟรี โดย XMAN Studio">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #030712; color: #e2e8f0; font-family: 'Noto Sans Thai', 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+        body { overflow-x: hidden; }
 
         /* Animated gradient orbs */
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; pointer-events: none; }
