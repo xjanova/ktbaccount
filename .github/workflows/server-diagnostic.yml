@@ -1,0 +1,98 @@
+name: Server Diagnostic
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to run'
+        required: true
+        default: 'logs'
+        type: choice
+        options:
+          - logs
+          - tinker
+          - fix-permissions
+          - clear-cache
+          - check-env
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Diagnostic
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
+            DEPLOY_PATH="${DEPLOY_PATH:-/home/admin/domains/ktbaccount.xman4289.com}"
+            cd "${DEPLOY_PATH}"
+
+            ACTION="${{ inputs.action }}"
+
+            case "$ACTION" in
+              logs)
+                echo "=== Last 100 lines of Laravel log ==="
+                LOG_FILE="storage/logs/laravel-$(date +%Y-%m-%d).log"
+                if [ -f "$LOG_FILE" ]; then
+                  tail -100 "$LOG_FILE"
+                else
+                  echo "No log file for today. Available logs:"
+                  ls -la storage/logs/ 2>/dev/null
+                  LATEST=$(ls -t storage/logs/laravel-*.log 2>/dev/null | head -1)
+                  if [ -n "$LATEST" ]; then
+                    echo "=== Last 100 lines of $LATEST ==="
+                    tail -100 "$LATEST"
+                  fi
+                fi
+                ;;
+              tinker)
+                echo "=== PHP/Laravel Info ==="
+                php -v
+                php artisan --version
+                echo ""
+                echo "=== Database connection ==="
+                php artisan tinker --execute="try { \DB::connection()->getPdo(); echo 'DB OK'; } catch(\Exception \$e) { echo 'DB Error: '.\$e->getMessage(); }" 2>&1
+                echo ""
+                echo "=== Users count ==="
+                php artisan tinker --execute="echo 'Users: '.App\Models\User::count().', Super Admins: '.App\Models\User::where('is_super_admin',true)->count();" 2>&1
+                echo ""
+                echo "=== Tables ==="
+                php artisan tinker --execute="echo implode(', ', array_map(fn(\$t) => \$t->{'Tables_in_'.env('DB_DATABASE')}, \DB::select('SHOW TABLES')));" 2>&1
+                ;;
+              fix-permissions)
+                echo "=== Fixing permissions ==="
+                chmod -R 775 storage bootstrap/cache
+                chown -R admin:admin . 2>/dev/null || true
+                echo "Done"
+                ;;
+              clear-cache)
+                echo "=== Clearing all caches ==="
+                php artisan config:clear
+                php artisan cache:clear
+                php artisan route:clear
+                php artisan view:clear
+                echo "=== Rebuilding cache ==="
+                php artisan config:cache
+                php artisan route:cache
+                php artisan view:cache
+                echo "Done"
+                ;;
+              check-env)
+                echo "=== .env check ==="
+                echo "APP_ENV=$(grep '^APP_ENV=' .env | cut -d= -f2)"
+                echo "APP_DEBUG=$(grep '^APP_DEBUG=' .env | cut -d= -f2)"
+                echo "APP_URL=$(grep '^APP_URL=' .env | cut -d= -f2)"
+                echo "APP_KEY=$(grep '^APP_KEY=' .env | cut -d= -f2 | head -c 20)..."
+                echo "DB_CONNECTION=$(grep '^DB_CONNECTION=' .env | cut -d= -f2)"
+                echo "DB_DATABASE=$(grep '^DB_DATABASE=' .env | cut -d= -f2)"
+                echo ""
+                echo "=== File structure ==="
+                ls -la public_html/
+                echo ""
+                echo "=== Storage ==="
+                ls -la storage/logs/ | tail -5
+                ;;
+            esac
