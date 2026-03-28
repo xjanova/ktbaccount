@@ -20,7 +20,7 @@
                 </div>
                 <div class="flex justify-between py-2 border-b border-white/5">
                     <span class="text-gray-400">เวอร์ชัน</span>
-                    <span class="text-indigo-400 font-mono">v{{ trim(file_get_contents(base_path('VERSION'))) }}</span>
+                    <span class="text-indigo-400 font-mono">v{{ $appVersion }}</span>
                 </div>
                 <div class="flex justify-between py-2 border-b border-white/5">
                     <span class="text-gray-400">PHP</span>

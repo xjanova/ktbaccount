@@ -3,6 +3,7 @@
 use App\Http\Middleware\CheckRoleMiddleware;
 use App\Http\Middleware\RedirectIfNotSetup;
 use App\Http\Middleware\SetTenantMiddleware;
+use App\Http\Middleware\SuperAdminMiddleware;
 use App\Http\Middleware\VerifyPdpaConsentMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -27,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'tenant.api' => SetTenantMiddleware::class,
             'role' => CheckRoleMiddleware::class,
             'pdpa' => VerifyPdpaConsentMiddleware::class,
+            'super_admin' => SuperAdminMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

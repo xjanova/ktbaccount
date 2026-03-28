@@ -215,7 +215,7 @@
                         </div>
                         <span class="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">จดจำฉัน</span>
                     </label>
-                    <a href="#" class="text-sm text-indigo-400 hover:text-indigo-300 transition-colors font-medium">ลืมรหัสผ่าน?</a>
+                    <span class="text-sm text-gray-500 cursor-not-allowed" title="เร็วๆ นี้">ลืมรหัสผ่าน?</span>
                 </div>
 
                 {{-- Submit --}}

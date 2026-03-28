@@ -157,7 +157,7 @@
 
             {{-- Footer --}}
             <p class="text-center text-gray-500 text-xs mt-6">
-                &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ trim(file_get_contents(base_path('VERSION'))) }}
+                &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ $appVersion }}
             </p>
         </div>
     </div>

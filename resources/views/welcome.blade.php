@@ -293,7 +293,7 @@
                 </div>
             </div>
             <div class="border-t border-white/5 mt-8 pt-8 text-center text-sm text-gray-600">
-                &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ trim(file_get_contents(base_path('VERSION'))) }}
+                &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ $appVersion }}
             </div>
         </div>
     </footer>

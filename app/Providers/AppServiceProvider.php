@@ -15,6 +15,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Observers\AuditObserver;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -37,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        // Share app version with all views
+        View::share('appVersion', trim(file_get_contents(base_path('VERSION'))));
 
         // Register audit observers for key models
         $auditableModels = [

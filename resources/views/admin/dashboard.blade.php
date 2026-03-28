@@ -229,7 +229,7 @@
                     {{-- Version --}}
                     <div class="flex items-center justify-between pt-3 border-t border-white/5">
                         <span class="text-sm text-gray-400">เวอร์ชันระบบ</span>
-                        <span class="text-sm text-indigo-400 font-mono">v{{ trim(file_get_contents(base_path('VERSION'))) }}</span>
+                        <span class="text-sm text-indigo-400 font-mono">v{{ $appVersion }}</span>
                     </div>
                 </div>
             </div>

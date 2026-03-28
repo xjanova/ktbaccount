@@ -43,7 +43,7 @@ Route::prefix('demo')->group(function () {
 });
 
 // Super Admin
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'super_admin'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/tenants', fn () => view('admin.tenants'))->name('admin.tenants');
     Route::get('/users', fn () => view('admin.users'))->name('admin.users');
