@@ -44,7 +44,8 @@ jobs:
             cd "${DEPLOY_PATH}"
 
             echo "=== Pulling latest code ==="
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
             echo "=== Installing Composer dependencies ==="
             composer install --no-dev --optimize-autoloader --no-interaction 2>/dev/null || \
