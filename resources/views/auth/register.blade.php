@@ -182,15 +182,20 @@
 @endsection
 
 @push('scripts')
+<style>.flatpickr-calendar { z-index: 9999 !important; }</style>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dateInput = document.getElementById('fund_established_date');
-        if (dateInput) {
-            flatpickr(dateInput, {
-                dateFormat: 'd/m/Y',
-                allowInput: true,
-            });
+    // Init flatpickr only when step 2 is shown (not on page load)
+    let fpInitialized = false;
+    const observer = new MutationObserver(function() {
+        const step2 = document.querySelector('[x-show="step === 2"]');
+        if (step2 && step2.style.display !== 'none' && !fpInitialized) {
+            const dateInput = document.getElementById('fund_established_date');
+            if (dateInput && typeof flatpickr !== 'undefined') {
+                flatpickr(dateInput, { dateFormat: 'd/m/Y', allowInput: true });
+                fpInitialized = true;
+            }
         }
     });
+    observer.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['style'] });
 </script>
 @endpush
