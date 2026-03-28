@@ -6,35 +6,37 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'เข้าสู่ระบบ' }} - KTB Account</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        body { background: #0a1128; }
+        .auth-bg { background: linear-gradient(135deg, #0a1128 0%, #0f1d3a 40%, #1a2744 70%, #1e3a8a 100%); }
+        .auth-orb-1 { position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,0.2),transparent 70%);top:-100px;left:-100px;filter:blur(60px);animation:ao1 20s ease-in-out infinite; }
+        .auth-orb-2 { position:fixed;width:350px;height:350px;border-radius:50%;background:radial-gradient(circle,rgba(220,38,38,0.15),transparent 70%);bottom:-50px;right:-50px;filter:blur(60px);animation:ao2 25s ease-in-out infinite; }
+        @keyframes ao1 { 0%,100% { transform:translate(0,0); } 50% { transform:translate(60px,40px); } }
+        @keyframes ao2 { 0%,100% { transform:translate(0,0); } 50% { transform:translate(-40px,-30px); } }
+        .auth-card { background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:20px; }
+    </style>
 </head>
-<body class="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+<body class="min-h-screen auth-bg flex items-center justify-center p-4">
 
-    {{-- Background pattern --}}
-    <div class="fixed inset-0 bg-gradient-primary opacity-50"></div>
-    <div class="fixed inset-0" style="background-image: radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);"></div>
+    <div class="auth-orb-1"></div>
+    <div class="auth-orb-2"></div>
 
     {{-- Content --}}
-    <div class="relative z-10 w-full max-w-md">
+    <div class="relative z-10 w-full max-w-lg">
         {{-- Logo --}}
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-600/20 border border-primary-500/30 mb-4">
-                <svg class="w-8 h-8 text-primary-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-                </svg>
-            </div>
-            <h1 class="text-2xl font-bold text-white">XMAN Studio</h1>
-            <p class="text-sm text-primary-300 mt-1">ระบบบริหารกองทุนหมู่บ้าน</p>
+            <img src="/images/logo-md.webp" alt="KTB Account" class="w-20 h-20 mx-auto mb-4" style="filter:drop-shadow(0 8px 20px rgba(212,168,67,0.3));">
+            <h1 class="text-2xl font-bold text-white">ระบบบริหารกองทุนหมู่บ้าน</h1>
+            <p class="text-sm text-blue-300 mt-1">Village Fund Management System</p>
         </div>
 
         {{-- Card --}}
-        <div class="gradient-border">
-            <div class="bg-gray-900/90 backdrop-blur-xl rounded-2xl p-6 sm:p-8 relative z-10">
-                @yield('content')
-            </div>
+        <div class="auth-card p-6 sm:p-8">
+            @yield('content')
         </div>
 
         {{-- Footer --}}
-        <p class="text-center text-xs text-gray-500 mt-6">&copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน</p>
+        <p class="text-center text-xs text-gray-500 mt-6">&copy; {{ date('Y') }} XMAN Studio - v{{ $appVersion ?? '1.0.0' }}</p>
     </div>
 
     @stack('scripts')
