@@ -78,6 +78,7 @@
                 <span class="text-lg font-bold text-white">KTB Account</span>
             </div>
             <div class="flex items-center gap-6">
+                <a href="/demo" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">🧪 ทดลองใช้งาน</a>
                 <a href="#features" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">คุณสมบัติ</a>
                 <a href="/guide" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">คู่มือ</a>
                 <a href="/login" class="glow-btn px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold rounded-xl">เข้าสู่ระบบ</a>

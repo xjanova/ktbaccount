@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Fund\DashboardController as FundDashboardController;
 use App\Http\Controllers\Fund\LineSettingsController;
 use App\Http\Controllers\GuideController;
@@ -31,6 +32,14 @@ Route::get('/privacy-policy', fn () => view('privacy-policy'))->name('privacy-po
 Route::get('/guide', [GuideController::class, 'index'])->name('guide.index');
 Route::get('/guide/search', [GuideController::class, 'search'])->name('guide.search');
 Route::get('/guide/{category}/{slug}', [GuideController::class, 'show'])->name('guide.show');
+
+// Demo Village (public - ทุกคนเข้าดูได้เพื่อทดสอบระบบ)
+Route::prefix('demo')->group(function () {
+    Route::get('/', [DemoController::class, 'dashboard'])->name('demo.dashboard');
+    Route::get('/loans', [DemoController::class, 'loans'])->name('demo.loans');
+    Route::get('/members', [DemoController::class, 'members'])->name('demo.members');
+    Route::get('/reports', [DemoController::class, 'reports'])->name('demo.reports');
+});
 
 // Super Admin Dashboard
 Route::prefix('admin')->middleware(['auth'])->group(function () {
