@@ -98,7 +98,7 @@ Route::prefix('fund')->middleware(['auth'])->group(function () {
     Route::get('/settings', function () {
         if (session('demo_mode')) {
             return view('fund.settings.line', [
-                'config' => new \stdClass,
+                'config' => new stdClass,
                 'webhookUrl' => 'https://ktbaccount.xman4289.com/api/line/webhook/demo',
                 'tenant' => (object) ['code' => 'demo', 'name' => 'กองทุนตัวอย่าง'],
             ]);
