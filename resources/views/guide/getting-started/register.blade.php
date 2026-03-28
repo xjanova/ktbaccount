@@ -14,9 +14,9 @@
         <x-guide-screenshot src="images/guide/getting-started/register-homepage.png" alt="หน้าแรกเว็บไซต์ KTB Account" caption="หน้าแรกของเว็บไซต์ KTB Account" />
     </x-guide-step>
 
-    <x-guide-step :number="2" title="คลิกปุ่ม "ลงทะเบียนกองทุนใหม่"">
+    <x-guide-step :number="2" title="คลิกปุ่มลงทะเบียนกองทุนใหม่">
         <p>ที่หน้าแรก จะเห็นปุ่ม <strong>"ลงทะเบียนกองทุนใหม่"</strong> ให้คลิกที่ปุ่มนี้เพื่อเริ่มลงทะเบียน</p>
-        <x-guide-screenshot src="images/guide/getting-started/register-button.png" alt="ปุ่มลงทะเบียนกองทุนใหม่" caption="คลิกที่ปุ่มสีม่วง "ลงทะเบียนกองทุนใหม่"" />
+        <x-guide-screenshot src="images/guide/getting-started/register-button.png" alt="ปุ่มลงทะเบียนกองทุนใหม่" caption="คลิกที่ปุ่มสีม่วง ลงทะเบียนกองทุนใหม่" />
     </x-guide-step>
 
     <x-guide-step :number="3" title="กรอกข้อมูลผู้ดูแลระบบ (ขั้นตอนที่ 1)">
