@@ -32,6 +32,7 @@
                     <th class="px-6 py-4 text-right font-medium">สินเชื่อรวม</th>
                     <th class="px-6 py-4 text-center font-medium">สถานะ</th>
                     <th class="px-6 py-4 text-right font-medium">ลงทะเบียน</th>
+                    <th class="px-6 py-4 text-center font-medium">จัดการ</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-white/5">
@@ -45,6 +46,14 @@
                     <td class="px-6 py-4 text-right text-white font-medium">฿{{ number_format($fund['loans']) }}</td>
                     <td class="px-6 py-4 text-center"><span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 text-xs rounded-full border border-emerald-500/30">ใช้งาน</span></td>
                     <td class="px-6 py-4 text-right text-gray-400 text-xs">{{ $fund['registered'] }}</td>
+                    <td class="px-6 py-4 text-center">
+                        <form method="POST" action="{{ route('admin.impersonate.fund', $i + 1) }}">
+                            @csrf
+                            <button type="submit" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition-colors" title="เข้าจัดการกองทุนนี้">
+                                🔑 เข้าจัดการ
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

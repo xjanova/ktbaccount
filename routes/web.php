@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\ImpersonateController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DemoController;
@@ -47,6 +48,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/tenants', fn () => view('admin.tenants'))->name('admin.tenants');
     Route::get('/users', fn () => view('admin.users'))->name('admin.users');
     Route::get('/settings', fn () => view('admin.settings'))->name('admin.settings');
+
+    // Impersonate - เข้าจัดการในนามกองทุน/ผู้ใช้
+    Route::post('/impersonate/fund/{tenantId}', [ImpersonateController::class, 'enterFund'])->name('admin.impersonate.fund');
+    Route::post('/impersonate/user/{userId}', [ImpersonateController::class, 'enterUser'])->name('admin.impersonate.user');
+    Route::post('/impersonate/leave', [ImpersonateController::class, 'leaveFund'])->name('admin.impersonate.leave');
+    Route::post('/impersonate/leave-user', [ImpersonateController::class, 'leaveUser'])->name('admin.impersonate.leave-user');
 });
 
 // Fund Management (tenant-scoped)

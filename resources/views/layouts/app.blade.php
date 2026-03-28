@@ -130,6 +130,23 @@
     {{-- Main content area --}}
     <div class="lg:ml-64 min-h-screen flex flex-col">
 
+        {{-- Impersonate Banner --}}
+        @if(session('impersonating_tenant_id') || session('impersonating_user_id'))
+        <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-4 py-2 text-sm flex items-center justify-between z-50">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+                <span class="font-medium">🔑 Super Admin Mode:</span>
+                <span>กำลังจัดการ {{ session('impersonating_tenant_name', '') }} {{ session('impersonating_user_name') ? '(ในนาม '.session('impersonating_user_name').')' : '' }}</span>
+            </div>
+            <form method="POST" action="{{ session('impersonating_user_id') ? route('admin.impersonate.leave-user') : route('admin.impersonate.leave') }}">
+                @csrf
+                <button type="submit" class="px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-medium transition-colors">
+                    ← กลับหน้า Admin
+                </button>
+            </form>
+        </div>
+        @endif
+
         {{-- Top bar --}}
         <header class="sticky top-0 z-30 bg-gray-900/80 backdrop-blur-xl border-b border-gray-800">
             <div class="flex items-center justify-between px-4 sm:px-6 py-3">
@@ -142,7 +159,13 @@
                     </button>
                     <div>
                         <h1 class="text-lg font-semibold text-white">@yield('page-title', 'แดชบอร์ด')</h1>
-                        <p class="text-xs text-gray-400">{{ auth()->user()->fund->name ?? 'กองทุนหมู่บ้าน' }}</p>
+                        <p class="text-xs text-gray-400">
+                            @if(session('impersonating_tenant_name'))
+                                {{ session('impersonating_tenant_name') }}
+                            @else
+                                กองทุนหมู่บ้าน
+                            @endif
+                        </p>
                     </div>
                 </div>
 
