@@ -19,7 +19,7 @@
             <x-form.select
                 name="member_id"
                 label="สมาชิกผู้กู้"
-                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_no . ' - ' . $m->full_name])->toArray()"
+                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_code . ' - ' . $m->full_name])->toArray()"
                 :required="true"
                 placeholder="-- เลือกสมาชิก --"
                 tooltip="เลือกสมาชิกที่ต้องการสร้างสัญญาสินเชื่อ"
@@ -68,7 +68,7 @@
             <x-form.select
                 name="guarantor_1_id"
                 label="ผู้ค้ำประกัน คนที่ 1"
-                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_no . ' - ' . $m->full_name])->toArray()"
+                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_code . ' - ' . $m->full_name])->toArray()"
                 placeholder="-- เลือกผู้ค้ำประกัน (ถ้ามี) --"
                 tooltip="เลือกสมาชิกที่เป็นผู้ค้ำประกัน"
             />
@@ -77,7 +77,7 @@
             <x-form.select
                 name="guarantor_2_id"
                 label="ผู้ค้ำประกัน คนที่ 2"
-                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_no . ' - ' . $m->full_name])->toArray()"
+                :options="($members ?? collect())->mapWithKeys(fn ($m) => [$m->id => $m->member_code . ' - ' . $m->full_name])->toArray()"
                 placeholder="-- เลือกผู้ค้ำประกัน (ถ้ามี) --"
                 tooltip="เลือกสมาชิกที่เป็นผู้ค้ำประกันคนที่สอง"
             />

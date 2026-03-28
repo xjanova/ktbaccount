@@ -31,7 +31,7 @@ class LoanController extends Controller
                 $query->whereHas('member', function ($q) use ($request) {
                     $q->where('first_name', 'like', "%{$request->member}%")
                         ->orWhere('last_name', 'like', "%{$request->member}%")
-                        ->orWhere('member_no', 'like', "%{$request->member}%");
+                        ->orWhere('member_code', 'like', "%{$request->member}%");
                 });
             }
 
