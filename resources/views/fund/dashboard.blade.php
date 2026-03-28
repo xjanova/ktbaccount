@@ -267,7 +267,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 datasets: [
                     {
                         label: 'รายรับ',
-                        data: @json(array_slice(($monthlyIncome ?? [45000,52000,48000,61000,55000,67000,0,0,0,0,0,0]), 0, 6)),
+                        @php $incomeData = array_slice(($monthlyIncome ?? [45000,52000,48000,61000,55000,67000,0,0,0,0,0,0]), 0, 6); @endphp
+                        data: @json($incomeData),
                         backgroundColor: 'rgba(99, 102, 241, 0.7)',
                         borderColor: 'rgba(99, 102, 241, 1)',
                         borderWidth: 1,
@@ -276,7 +277,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     {
                         label: 'รายจ่าย',
-                        data: @json(array_slice(($monthlyExpense ?? [32000,28000,35000,29000,31000,38000,0,0,0,0,0,0]), 0, 6)),
+                        @php $expenseData = array_slice(($monthlyExpense ?? [32000,28000,35000,29000,31000,38000,0,0,0,0,0,0]), 0, 6); @endphp
+                        data: @json($expenseData),
                         backgroundColor: 'rgba(239, 68, 68, 0.5)',
                         borderColor: 'rgba(239, 68, 68, 0.8)',
                         borderWidth: 1,
@@ -306,10 +308,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (ldCtx) {
         new Chart(ldCtx, {
             type: 'doughnut',
+            @php
+                $defaultLoanCats = $loanCategories ?? ['สินเชื่อฉุกเฉิน', 'สินเชื่อทั่วไป', 'สินเชื่อเพื่อการศึกษา', 'สินเชื่อเพื่อที่อยู่อาศัย'];
+                $defaultLoanAmts = $loanAmounts ?? [30, 40, 15, 15];
+            @endphp
             data: {
-                labels: @json($loanCategories ?? ['สินเชื่อฉุกเฉิน', 'สินเชื่อทั่วไป', 'สินเชื่อเพื่อการศึกษา', 'สินเชื่อเพื่อที่อยู่อาศัย']),
+                labels: @json($defaultLoanCats),
                 datasets: [{
-                    data: @json($loanAmounts ?? [30, 40, 15, 15]),
+                    data: @json($defaultLoanAmts),
                     backgroundColor: [
                         'rgba(99, 102, 241, 0.8)',
                         'rgba(139, 92, 246, 0.8)',
