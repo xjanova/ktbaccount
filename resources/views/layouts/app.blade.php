@@ -29,7 +29,7 @@
             </div>
             <div>
                 <span class="text-sm font-bold text-white tracking-wide">XMAN Studio</span>
-                <p class="text-xs text-primary-300 truncate">{{ auth()->user()->fund->name ?? 'กองทุนหมู่บ้าน' }}</p>
+                <p class="text-xs text-primary-300 truncate">{{ auth()->user()?->fund?->name ?? (session('impersonating_tenant_name') ?? 'กองทุนหมู่บ้าน') }}</p>
             </div>
             <button @click="sidebarOpen = false" class="ml-auto lg:hidden text-primary-300 hover:text-white">
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -183,9 +183,9 @@
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-800 transition-colors" title="โปรไฟล์">
                             <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-sm font-bold text-white">
-                                {{ mb_substr(auth()->user()->name ?? 'U', 0, 1) }}
+                                {{ mb_substr(auth()->user()?->name ?? 'D', 0, 1) }}
                             </div>
-                            <span class="hidden sm:block text-sm text-gray-300">{{ auth()->user()->name ?? 'ผู้ใช้' }}</span>
+                            <span class="hidden sm:block text-sm text-gray-300">{{ auth()->user()?->name ?? 'ผู้ทดลอง' }}</span>
                             <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                             </svg>

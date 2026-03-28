@@ -16,7 +16,7 @@ class RedirectIfNotSetup
     public function handle(Request $request, Closure $next): Response
     {
         // ไม่ต้องเช็คสำหรับ routes เหล่านี้
-        $excludedPaths = ['setup', 'api/', 'guide', 'privacy-policy', 'build/', 'images/'];
+        $excludedPaths = ['setup', 'api/', 'guide', 'demo', 'privacy-policy', 'build/', 'images/'];
         foreach ($excludedPaths as $path) {
             if ($request->is($path) || $request->is($path.'*')) {
                 return $next($request);
