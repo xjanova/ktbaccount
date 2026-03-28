@@ -154,9 +154,9 @@
                     <input type="checkbox" name="pdpa_consent" required class="mt-0.5 w-5 h-5 rounded bg-gray-800 border-gray-600 text-primary-600 focus:ring-primary-500 focus:ring-offset-0">
                     <span class="text-sm text-gray-300">
                         ข้าพเจ้ายินยอมให้เก็บรวบรวม ใช้ และเปิดเผยข้อมูลส่วนบุคคลตาม
-                        <a href="#" class="text-primary-400 hover:text-primary-300 underline">นโยบายความเป็นส่วนตัว</a>
+                        <a href="{{ route('privacy-policy') }}" class="text-primary-400 hover:text-primary-300 underline">นโยบายความเป็นส่วนตัว</a>
                         และ
-                        <a href="#" class="text-primary-400 hover:text-primary-300 underline">ข้อกำหนดการใช้งาน</a>
+                        <a href="{{ route('privacy-policy') }}" class="text-primary-400 hover:text-primary-300 underline">ข้อกำหนดการใช้งาน</a>
                     </span>
                 </label>
 

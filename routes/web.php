@@ -71,6 +71,21 @@ Route::prefix('fund')->middleware(['auth'])->group(function () {
     // Reports (รายงาน)
     Route::get('/reports', fn () => view('fund.reports.index'))->name('fund.reports.index');
 
+    // Deposits (เงินฝาก)
+    Route::get('/deposits', fn () => view('fund.transactions.index'))->name('fund.deposits.index');
+
+    // Shares (หุ้น)
+    Route::get('/shares', fn () => view('fund.transactions.index'))->name('fund.shares.index');
+
+    // Members (สมาชิก)
+    Route::get('/members', fn () => view('fund.transactions.index'))->name('fund.members.index');
+
+    // Approvals (อนุมัติ)
+    Route::get('/approvals', fn () => view('fund.transactions.index'))->name('fund.approvals.index');
+
+    // Account Sets (ชุดบัญชี)
+    Route::get('/account-sets', fn () => view('fund.transactions.index'))->name('fund.account-sets.index');
+
     // Settings (ตั้งค่า)
     Route::get('/settings', fn () => view('fund.settings.line'))->name('fund.settings');
     Route::get('/settings/line', [LineSettingsController::class, 'index'])->name('fund.settings.line');

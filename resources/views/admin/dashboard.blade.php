@@ -4,9 +4,9 @@
 
 @section('content')
     @php
-        // Demo data - ข้อมูลตัวอย่าง (ใช้ค่าจาก controller ถ้ามี หรือใช้ค่า demo)
-        $totalFunds = $totalFunds ?? 3;
-        $totalMembers = $totalMembers ?? 347;
+        // Query real data first, fallback to demo
+        $totalFunds = $totalFunds ?? \App\Models\Tenant::count() ?: 3;
+        $totalMembers = $totalMembers ?? \App\Models\Member::withoutGlobalScopes()->count() ?: 347;
         $totalLoans = $totalLoans ?? 4250000.00;
         $totalDeposits = $totalDeposits ?? 2180500.00;
         $totalShares = $totalShares ?? 865000.00;
@@ -229,7 +229,7 @@
                     {{-- Version --}}
                     <div class="flex items-center justify-between pt-3 border-t border-white/5">
                         <span class="text-sm text-gray-400">เวอร์ชันระบบ</span>
-                        <span class="text-sm text-indigo-400 font-mono">v{{ file_get_contents(base_path('VERSION')) }}</span>
+                        <span class="text-sm text-indigo-400 font-mono">v{{ trim(file_get_contents(base_path('VERSION'))) }}</span>
                     </div>
                 </div>
             </div>

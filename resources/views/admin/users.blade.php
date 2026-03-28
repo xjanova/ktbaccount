@@ -4,9 +4,23 @@
 
 @section('content')
 @php
-    $users = [
-        ['name' => auth()->user()->name ?? 'Admin', 'email' => auth()->user()->email ?? 'admin@xman4289.com', 'role' => 'Super Admin', 'fund' => 'ทุกกองทุน', 'status' => 'active', 'last_login' => 'ตอนนี้'],
-    ];
+    $dbUsers = \App\Models\User::all();
+    if ($dbUsers->isNotEmpty()) {
+        $users = $dbUsers->map(function ($u) {
+            return [
+                'name' => $u->name,
+                'email' => $u->email,
+                'role' => $u->is_super_admin ? 'Super Admin' : ($u->currentTenantRole() ?? 'member'),
+                'fund' => $u->is_super_admin ? 'ทุกกองทุน' : ($u->fund->name ?? '-'),
+                'status' => 'active',
+                'last_login' => $u->updated_at ? $u->updated_at->diffForHumans() : '-',
+            ];
+        })->toArray();
+    } else {
+        $users = [
+            ['name' => auth()->user()->name ?? 'Admin', 'email' => auth()->user()->email ?? 'admin@xman4289.com', 'role' => 'Super Admin', 'fund' => 'ทุกกองทุน', 'status' => 'active', 'last_login' => 'ตอนนี้'],
+        ];
+    }
 @endphp
 
 <div class="space-y-6">

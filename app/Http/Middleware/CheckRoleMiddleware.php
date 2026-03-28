@@ -51,7 +51,7 @@ class CheckRoleMiddleware
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            return redirect()->route('tenants.select');
+            return redirect('/');
         }
 
         // Check if the user has any of the required roles in the current tenant

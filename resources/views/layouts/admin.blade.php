@@ -106,7 +106,7 @@
                         </button>
                         <div x-show="open" @click.outside="open = false"
                              x-transition class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-xl py-1 z-50">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">โปรไฟล์</a>
+                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">โปรไฟล์</a>
                             <hr class="my-1 border-gray-700">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -146,7 +146,7 @@
 
         {{-- Footer --}}
         <footer class="px-4 sm:px-6 py-4 border-t border-gray-800">
-            <p class="text-xs text-gray-500 text-center">&copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ file_get_contents(base_path('VERSION')) }}</p>
+            <p class="text-xs text-gray-500 text-center">&copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ trim(file_get_contents(base_path('VERSION'))) }}</p>
         </footer>
     </div>
 

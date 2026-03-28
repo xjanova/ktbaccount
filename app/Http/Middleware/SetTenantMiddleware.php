@@ -44,7 +44,7 @@ class SetTenantMiddleware
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            return redirect()->route('tenants.select')
+            return redirect('/')
                 ->with('error', 'กรุณาเลือกกองทุนก่อนดำเนินการ');
         }
 
