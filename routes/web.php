@@ -95,7 +95,17 @@ Route::prefix('fund')->middleware(['auth'])->group(function () {
     Route::get('/account-sets', fn () => view('fund.transactions.index'))->name('fund.account-sets.index');
 
     // Settings (ตั้งค่า)
-    Route::get('/settings', fn () => view('fund.settings.line'))->name('fund.settings');
+    Route::get('/settings', function () {
+        if (session('demo_mode')) {
+            return view('fund.settings.line', [
+                'config' => new \stdClass,
+                'webhookUrl' => 'https://ktbaccount.xman4289.com/api/line/webhook/demo',
+                'tenant' => (object) ['code' => 'demo', 'name' => 'กองทุนตัวอย่าง'],
+            ]);
+        }
+
+        return app(LineSettingsController::class)->index();
+    })->name('fund.settings');
     Route::get('/settings/line', [LineSettingsController::class, 'index'])->name('fund.settings.line');
     Route::put('/settings/line', [LineSettingsController::class, 'update'])->name('fund.settings.line.update');
 });
