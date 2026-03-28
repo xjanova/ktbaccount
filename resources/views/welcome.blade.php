@@ -3,309 +3,389 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ระบบบริหารกองทุนหมู่บ้าน - KTB Account</title>
+    <title>ระบบบริหารกองทุนหมู่บ้าน - KTB Account by XMAN Studio</title>
     <meta name="description" content="ระบบบริหารกองทุนหมู่บ้านออนไลน์ จัดการบัญชี สินเชื่อ เงินฝาก หุ้น รายงานการเงิน ฟรี โดย XMAN Studio">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans Thai', 'Inter', system-ui, sans-serif; background: #030712; color: #e2e8f0; overflow-x: hidden; line-height: 1.7; }
+        a { text-decoration: none; color: inherit; }
 
-        /* Animated gradient orbs */
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; pointer-events: none; }
-        .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #6366f1, transparent 70%); top: -200px; left: -200px; animation: orbFloat1 20s ease-in-out infinite; }
-        .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #8b5cf6, transparent 70%); top: 30%; right: -150px; animation: orbFloat2 25s ease-in-out infinite; }
-        .orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, #a855f7, transparent 70%); bottom: -100px; left: 30%; animation: orbFloat3 18s ease-in-out infinite; }
-        @keyframes orbFloat1 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(100px,80px); } }
-        @keyframes orbFloat2 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-80px,60px); } }
-        @keyframes orbFloat3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px,-80px); } }
+        /* ── Animated Background ── */
+        .hero-bg { position: relative; min-height: 100vh; background: linear-gradient(160deg, #030712 0%, #0f172a 30%, #1e1b4b 60%, #312e81 100%); }
+        .hero-bg::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Cpath d='M0 60V0h1v60zm60 0V0h1v60zM0 0h60v1H0zm0 60h60v1H0z' fill='%236366f1' fill-opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; }
 
-        /* Grid pattern */
-        .grid-bg { background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px); background-size: 60px 60px; }
+        /* Floating Orbs */
+        .orb { position: absolute; border-radius: 50%; pointer-events: none; }
+        .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(99,102,241,0.3), transparent 70%); top: -100px; left: -100px; animation: float1 20s ease-in-out infinite; filter: blur(60px); }
+        .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,92,246,0.25), transparent 70%); top: 40%; right: -80px; animation: float2 25s ease-in-out infinite; filter: blur(60px); }
+        .orb-3 { width: 350px; height: 350px; background: radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%); bottom: 10%; left: 20%; animation: float3 18s ease-in-out infinite; filter: blur(60px); }
+        @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(80px,60px) scale(1.1); } }
+        @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-60px,40px) scale(0.9); } }
+        @keyframes float3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(40px,-50px); } }
 
-        /* Gradient text */
-        .gradient-text { background: linear-gradient(135deg, #818cf8 0%, #a78bfa 30%, #c084fc 60%, #818cf8 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradientShift 4s ease-in-out infinite; }
-        @keyframes gradientShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        /* Gradient Text */
+        .grad-text { background: linear-gradient(135deg, #818cf8 0%, #a78bfa 25%, #c084fc 50%, #e879f9 75%, #818cf8 100%); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradMove 4s ease-in-out infinite; }
+        @keyframes gradMove { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-        /* Glass card */
-        .glass { background: rgba(255,255,255,0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .glass-strong { background: rgba(255,255,255,0.06); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.12); }
+        /* Glass */
+        .glass { background: rgba(255,255,255,0.04); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; }
+        .glass-strong { background: rgba(255,255,255,0.07); backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; }
 
-        /* Feature card hover */
-        .feature-card { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
-        .feature-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); box-shadow: 0 25px 50px -12px rgba(99,102,241,0.25); }
+        /* Card Hover */
+        .hover-card { transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .hover-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 30px 60px -15px rgba(99,102,241,0.3); border-color: rgba(255,255,255,0.2); }
 
-        /* Glow button */
-        .glow-btn { position: relative; overflow: hidden; transition: all 0.3s; }
-        .glow-btn:hover { box-shadow: 0 0 30px rgba(99,102,241,0.4), 0 0 60px rgba(99,102,241,0.2); transform: translateY(-2px); }
-        .glow-btn::after { content: ''; position: absolute; inset: -2px; background: linear-gradient(135deg, #6366f1, #a855f7, #6366f1); z-index: -1; border-radius: inherit; opacity: 0; transition: opacity 0.3s; }
-        .glow-btn:hover::after { opacity: 1; }
+        /* Glow Button */
+        .glow-btn { transition: all 0.3s; position: relative; }
+        .glow-btn:hover { box-shadow: 0 0 30px rgba(99,102,241,0.5), 0 0 60px rgba(99,102,241,0.2); transform: translateY(-2px); }
 
-        /* Float animation */
-        .float { animation: floatAnim 6s ease-in-out infinite; }
-        @keyframes floatAnim { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        /* Pulse Glow */
+        .pulse-glow { animation: pulseG 2s ease-in-out infinite; }
+        @keyframes pulseG { 0%,100% { box-shadow: 0 0 5px rgba(99,102,241,0.3); } 50% { box-shadow: 0 0 25px rgba(99,102,241,0.6), 0 0 50px rgba(99,102,241,0.2); } }
 
-        /* Fade in on scroll */
-        .fade-up { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
-        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        /* Float Animation */
+        .float-anim { animation: floatUp 6s ease-in-out infinite; }
+        @keyframes floatUp { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* Pulse badge */
-        .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
-        @keyframes pulseGlow { 0%,100% { box-shadow: 0 0 5px rgba(99,102,241,0.3); } 50% { box-shadow: 0 0 20px rgba(99,102,241,0.6); } }
+        /* Slide In */
+        .slide-up { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.4,0,0.2,1); }
+        .slide-up.visible { opacity: 1; transform: translateY(0); }
 
-        /* Step connector */
-        .step-line { position: relative; }
-        .step-line::after { content: ''; position: absolute; top: 50%; left: 100%; width: 100%; height: 2px; background: linear-gradient(90deg, #6366f1, transparent); }
+        /* Counter */
+        .counter { font-variant-numeric: tabular-nums; }
+
+        /* Nav */
+        .nav-glass { background: rgba(3,7,18,0.7); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+        /* Feature Icon Glow */
+        .icon-glow { box-shadow: 0 0 20px var(--glow-color, rgba(99,102,241,0.3)); }
+
+        /* Responsive */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        @media (max-width: 768px) {
+            .hero-grid { grid-template-columns: 1fr !important; }
+            .hero-right { display: none; }
+            .features-grid { grid-template-columns: 1fr !important; }
+            .steps-grid { grid-template-columns: 1fr !important; }
+            .trust-grid { grid-template-columns: 1fr !important; }
+            .footer-grid { grid-template-columns: 1fr !important; }
+        }
     </style>
 </head>
-<body class="antialiased" x-data="{ scrolled: false }" @scroll.window="scrolled = window.scrollY > 50">
+<body>
 
-    {{-- Animated background orbs --}}
-    <div class="fixed inset-0 pointer-events-none z-0">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+<!-- ══════ NAV ══════ -->
+<nav class="nav-glass" style="position:fixed;top:0;width:100%;z-index:100;">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;height:64px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 15px rgba(99,102,241,0.4);">
+                <svg width="20" height="20" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+            </div>
+            <span style="font-size:18px;font-weight:800;color:white;letter-spacing:-0.5px;">KTB Account</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:24px;">
+            <a href="/demo" style="color:#a5b4fc;font-size:14px;font-weight:500;">🧪 ทดลองใช้</a>
+            <a href="#features" style="color:#9ca3af;font-size:14px;">คุณสมบัติ</a>
+            <a href="/guide" style="color:#9ca3af;font-size:14px;">คู่มือ</a>
+            <a href="/login" class="glow-btn" style="padding:8px 24px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-size:14px;font-weight:600;border-radius:12px;">เข้าสู่ระบบ</a>
+        </div>
     </div>
+</nav>
 
-    {{-- Grid overlay --}}
-    <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
+<!-- ══════ HERO ══════ -->
+<section class="hero-bg">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
 
-    {{-- NAV --}}
-    <nav class="fixed top-0 w-full z-50 transition-all duration-500" :class="scrolled ? 'glass-strong shadow-2xl' : 'bg-transparent'">
-        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                </div>
-                <span class="text-lg font-bold text-white">KTB Account</span>
-            </div>
-            <div class="flex items-center gap-6">
-                <a href="/demo" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">🧪 ทดลองใช้งาน</a>
-                <a href="#features" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">คุณสมบัติ</a>
-                <a href="/guide" class="text-gray-400 hover:text-white text-sm transition-colors hidden md:block">คู่มือ</a>
-                <a href="/login" class="glow-btn px-5 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-semibold rounded-xl">เข้าสู่ระบบ</a>
-            </div>
-        </div>
-    </nav>
+    <div class="container" style="position:relative;z-index:10;padding-top:120px;padding-bottom:80px;">
+        <div class="hero-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
 
-    {{-- HERO --}}
-    <section class="relative min-h-screen flex items-center z-10 pt-16">
-        <div class="max-w-7xl mx-auto px-6 py-20">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    {{-- Badge --}}
-                    <div class="inline-flex items-center gap-2 px-4 py-1.5 glass rounded-full text-indigo-300 text-sm mb-8 pulse-glow">
-                        <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                        ใช้งานฟรีตลอดชีพ
-                    </div>
-
-                    <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
-                        <span class="text-white">ระบบบริหาร</span><br>
-                        <span class="gradient-text">กองทุนหมู่บ้าน</span>
-                    </h1>
-
-                    <p class="text-lg text-gray-400 mb-10 leading-relaxed max-w-lg">
-                        จัดการบัญชี สินเชื่อ เงินฝาก หุ้น รายงานการเงิน ครบจบในที่เดียว
-                        ใช้งานง่าย ปลอดภัย พร้อมแจ้งเตือนผ่าน LINE
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 mb-14">
-                        <a href="/register" class="glow-btn px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl text-center text-lg">
-                            เริ่มต้นใช้งาน
-                        </a>
-                        <a href="/guide" class="px-8 py-4 glass hover:bg-white/10 text-white font-medium rounded-2xl text-center text-lg transition-all">
-                            ดูคู่มือการใช้งาน
-                        </a>
-                    </div>
-
-                    {{-- Stats --}}
-                    <div class="grid grid-cols-4 gap-4" x-data="{ show: false }" x-intersect="show = true">
-                        <div><div class="text-2xl font-bold text-white" x-text="show ? '77K+' : '0'">0</div><div class="text-xs text-gray-500">กองทุน</div></div>
-                        <div><div class="text-2xl font-bold text-white" x-text="show ? '10M+' : '0'">0</div><div class="text-xs text-gray-500">สมาชิก</div></div>
-                        <div><div class="text-2xl font-bold text-white" x-text="show ? '฿50B+' : '0'">0</div><div class="text-xs text-gray-500">บริหาร</div></div>
-                        <div><div class="text-2xl font-bold text-white" x-text="show ? '99.9%' : '0'">0</div><div class="text-xs text-gray-500">ปลอดภัย</div></div>
-                    </div>
+            <!-- Left -->
+            <div>
+                <div class="pulse-glow" style="display:inline-flex;align-items:center;gap:8px;padding:6px 18px;border-radius:50px;border:1px solid rgba(99,102,241,0.3);background:rgba(99,102,241,0.1);margin-bottom:32px;">
+                    <span style="width:8px;height:8px;background:#34d399;border-radius:50%;animation:pulseG 1.5s infinite;"></span>
+                    <span style="color:#a5b4fc;font-size:14px;font-weight:500;">ใช้งานฟรีตลอดชีพ ไม่มีค่าใช้จ่าย</span>
                 </div>
 
-                {{-- Dashboard Preview --}}
-                <div class="hidden lg:block float">
-                    <div class="glass-strong rounded-3xl p-6 shadow-2xl shadow-indigo-500/10">
-                        <div class="grid grid-cols-2 gap-3 mb-4">
-                            <div class="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-4">
-                                <div class="text-xs text-indigo-300 mb-1">เงินสด</div>
-                                <div class="text-xl font-bold text-white">฿125,430</div>
-                                <div class="text-xs text-emerald-400 mt-1">↑ 12.5%</div>
-                            </div>
-                            <div class="bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4">
-                                <div class="text-xs text-purple-300 mb-1">เงินฝาก</div>
-                                <div class="text-xl font-bold text-white">฿1,250,000</div>
-                                <div class="text-xs text-emerald-400 mt-1">↑ 5.2%</div>
-                            </div>
-                            <div class="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4">
-                                <div class="text-xs text-amber-300 mb-1">สินเชื่อคงค้าง</div>
-                                <div class="text-xl font-bold text-white">฿890,500</div>
-                                <div class="text-xs text-amber-400 mt-1">15 สัญญา</div>
-                            </div>
-                            <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4">
-                                <div class="text-xs text-emerald-300 mb-1">สมาชิก</div>
-                                <div class="text-xl font-bold text-white">127 คน</div>
-                                <div class="text-xs text-emerald-400 mt-1">+3 เดือนนี้</div>
-                            </div>
-                        </div>
-                        <div class="bg-white/5 rounded-2xl p-4">
-                            <div class="text-xs text-gray-400 mb-3">รายรับ-รายจ่ายรายเดือน</div>
-                            <div class="flex items-end gap-1.5 h-24">
-                                @php $bars = [40,65,45,80,55,90,70,85,60,95,75,88]; @endphp
-                                @foreach($bars as $h)
-                                    <div class="flex-1 rounded-t-sm bg-gradient-to-t from-indigo-600/80 to-purple-500/60" style="height:{{ $h }}%"></div>
-                                @endforeach
-                            </div>
-                            <div class="flex justify-between mt-2">
-                                <span class="text-[10px] text-gray-500">ม.ค.</span>
-                                <span class="text-[10px] text-gray-500">มิ.ย.</span>
-                                <span class="text-[10px] text-gray-500">ธ.ค.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+                <h1 style="font-size:clamp(40px,6vw,72px);font-weight:900;line-height:1.1;margin-bottom:24px;">
+                    <span style="color:white;">ระบบบริหาร</span><br>
+                    <span class="grad-text">กองทุนหมู่บ้าน</span>
+                </h1>
 
-    {{-- FEATURES --}}
-    <section id="features" class="relative z-10 py-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16 fade-up" x-data x-intersect="$el.classList.add('visible')">
-                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">ทุกเครื่องมือที่กองทุนต้องการ</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">ออกแบบมาเพื่อกองทุนหมู่บ้านโดยเฉพาะ ใช้งานง่าย ปลอดภัย</p>
-                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mx-auto mt-6"></div>
-            </div>
+                <p style="font-size:18px;color:#94a3b8;margin-bottom:40px;max-width:500px;line-height:1.8;">
+                    จัดการบัญชี สินเชื่อ เงินฝาก หุ้น รายงานการเงิน
+                    <strong style="color:#c4b5fd;">ครบจบในที่เดียว</strong>
+                    ใช้งานง่าย ปลอดภัย พร้อมแจ้งเตือนผ่าน LINE
+                </p>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @php
-                $features = [
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>', 'color' => 'indigo', 'title' => 'บันทึกบัญชี', 'desc' => 'บันทึกรายรับ-รายจ่าย ระบบบัญชีแยกประเภท งบทดลอง งบกำไรขาดทุน งบดุล ครบถ้วน'],
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>', 'color' => 'emerald', 'title' => 'สินเชื่อ', 'desc' => 'สร้างสัญญา อนุมัติ เบิกจ่าย รับชำระ ตารางผ่อนชำระอัตโนมัติ ติดตามหนี้'],
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>', 'color' => 'blue', 'title' => 'เงินฝาก & หุ้น', 'desc' => 'รับฝาก-ถอนเงิน ซื้อ-ขายหุ้น คำนวณดอกเบี้ย ดูยอดคงเหลือ ประวัติทุกรายการ'],
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>', 'color' => 'purple', 'title' => 'รายงานการเงิน', 'desc' => 'งบทดลอง งบกำไรขาดทุน งบดุล บัญชีแยกประเภท ดาวน์โหลด PDF กราฟสรุป'],
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>', 'color' => 'cyan', 'title' => 'แอปมือถือ', 'desc' => 'สมาชิกดูยอดสินเชื่อ เงินฝาก หุ้น ผ่านแอปได้ อัพเดทอัตโนมัติ สะดวก'],
-                    ['icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>', 'color' => 'green', 'title' => 'LINE แจ้งเตือน', 'desc' => 'เชื่อมต่อ LINE OA แจ้งเตือนครบกำหนดชำระ ยืนยันฝาก-ถอน ข่าวสาร อัตโนมัติ'],
-                ];
-                $colors = ['indigo'=>'99,102,241','emerald'=>'16,185,129','blue'=>'59,130,246','purple'=>'139,92,246','cyan'=>'6,182,212','green'=>'34,197,94'];
-                @endphp
-
-                @foreach($features as $i => $f)
-                <div class="feature-card glass rounded-2xl p-6 fade-up" x-data x-intersect="$el.classList.add('visible')" style="border-top: 2px solid rgba({{ $colors[$f['color']] }}, 0.5); transition-delay: {{ $i * 100 }}ms">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background: rgba({{ $colors[$f['color']] }}, 0.15)">
-                        <svg class="w-6 h-6" style="color: rgb({{ $colors[$f['color']] }})" fill="none" stroke="currentColor" viewBox="0 0 24 24">{!! $f['icon'] !!}</svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-white mb-2">{{ $f['title'] }}</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">{{ $f['desc'] }}</p>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- HOW IT WORKS --}}
-    <section class="relative z-10 py-24">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="text-center mb-16 fade-up" x-data x-intersect="$el.classList.add('visible')">
-                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">เริ่มต้นง่ายใน 3 ขั้นตอน</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full mx-auto mt-6"></div>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-8 fade-up" x-data x-intersect="$el.classList.add('visible')">
-                @foreach([['1','ลงทะเบียนกองทุน','กรอกข้อมูลกองทุนและผู้ดูแล ใช้เวลาไม่ถึง 5 นาที'],['2','ตั้งค่าข้อมูล','เพิ่มชุดบัญชี บัญชีธนาคาร และสมาชิก'],['3','เริ่มใช้งาน','บันทึกบัญชี จัดการสินเชื่อ ดูรายงาน ได้ทันที']] as $step)
-                <div class="text-center">
-                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white shadow-lg shadow-indigo-500/30">{{ $step[0] }}</div>
-                    <h3 class="text-lg font-semibold text-white mb-2">{{ $step[1] }}</h3>
-                    <p class="text-gray-400 text-sm">{{ $step[2] }}</p>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- TRUST --}}
-    <section class="relative z-10 py-24">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="text-center mb-16 fade-up" x-data x-intersect="$el.classList.add('visible')">
-                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">ปลอดภัยระดับสากล</h2>
-            </div>
-            <div class="grid md:grid-cols-3 gap-6 fade-up" x-data x-intersect="$el.classList.add('visible')">
-                @foreach([['🛡️','คุ้มครอง PDPA','ปฏิบัติตามพ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล ครบถ้วน'],['🔒','เข้ารหัส AES-256','ข้อมูลสำคัญเข้ารหัสระดับธนาคาร ปลอดภัยสูงสุด'],['📋','ตรวจสอบได้ทุกรายการ','ระบบ Audit Log บันทึกทุกการเปลี่ยนแปลง ย้อนดูได้']] as $item)
-                <div class="glass rounded-2xl p-6 text-center">
-                    <div class="text-4xl mb-4">{{ $item[0] }}</div>
-                    <h3 class="text-lg font-semibold text-white mb-2">{{ $item[1] }}</h3>
-                    <p class="text-gray-400 text-sm">{{ $item[2] }}</p>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
-    {{-- CTA --}}
-    <section class="relative z-10 py-24">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <div class="glass-strong rounded-3xl p-12 fade-up" x-data x-intersect="$el.classList.add('visible')" style="border: 1px solid rgba(99,102,241,0.3)">
-                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">เริ่มบริหารกองทุนวันนี้</h2>
-                <p class="text-gray-400 text-lg mb-8">ฟรีตลอดชีพ ไม่มีค่าใช้จ่ายแอบแฝง</p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/register" class="glow-btn px-10 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold rounded-2xl text-lg">
-                        ลงทะเบียนฟรี
+                <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:48px;">
+                    <a href="/register" class="glow-btn" style="padding:16px 36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-size:17px;font-weight:700;border-radius:16px;display:inline-flex;align-items:center;gap:8px;">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        เริ่มต้นใช้งาน
                     </a>
-                    <a href="/guide" class="px-10 py-4 glass hover:bg-white/10 text-white font-medium rounded-2xl text-lg transition-all">
-                        อ่านคู่มือก่อน
+                    <a href="/demo" class="glass" style="padding:16px 36px;color:white;font-size:17px;font-weight:500;display:inline-flex;align-items:center;gap:8px;transition:all 0.3s;">
+                        🧪 ทดลองใช้งาน
                     </a>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    {{-- FOOTER --}}
-    <footer class="relative z-10 border-t border-white/5 py-12">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid sm:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <!-- Stats -->
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;">
+                    <div><div class="counter" style="font-size:28px;font-weight:800;color:white;">77K+</div><div style="font-size:12px;color:#64748b;">กองทุน</div></div>
+                    <div><div class="counter" style="font-size:28px;font-weight:800;color:white;">10M+</div><div style="font-size:12px;color:#64748b;">สมาชิก</div></div>
+                    <div><div class="counter" style="font-size:28px;font-weight:800;color:white;">฿50B+</div><div style="font-size:12px;color:#64748b;">บริหาร</div></div>
+                    <div><div class="counter" style="font-size:28px;font-weight:800;color:white;">99.9%</div><div style="font-size:12px;color:#64748b;">ปลอดภัย</div></div>
+                </div>
+            </div>
+
+            <!-- Right: SVG Illustration Dashboard -->
+            <div class="hero-right float-anim">
+                <div class="glass-strong" style="padding:28px;box-shadow:0 40px 80px -20px rgba(99,102,241,0.3);">
+
+                    <!-- Mini Nav Bar -->
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <div style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></div>
+                        <div style="width:10px;height:10px;border-radius:50%;background:#eab308;"></div>
+                        <div style="width:10px;height:10px;border-radius:50%;background:#22c55e;"></div>
+                        <div style="flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:6px;margin-left:8px;display:flex;align-items:center;padding:0 10px;">
+                            <span style="font-size:10px;color:#64748b;">ktbaccount.xman4289.com</span>
                         </div>
-                        <span class="font-bold text-white">KTB Account</span>
                     </div>
-                    <p class="text-gray-500 text-sm">ระบบบริหารกองทุนหมู่บ้านออนไลน์<br>โดย XMAN Studio</p>
+
+                    <!-- Stat Cards -->
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+                        <div style="background:linear-gradient(135deg,rgba(99,102,241,0.15),rgba(99,102,241,0.05));border:1px solid rgba(99,102,241,0.2);border-radius:14px;padding:14px;">
+                            <div style="font-size:10px;color:#a5b4fc;margin-bottom:4px;">💰 เงินสด</div>
+                            <div style="font-size:20px;font-weight:800;color:white;">฿125,430</div>
+                            <div style="font-size:10px;color:#34d399;margin-top:2px;">↑ 12.5%</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(139,92,246,0.05));border:1px solid rgba(139,92,246,0.2);border-radius:14px;padding:14px;">
+                            <div style="font-size:10px;color:#c4b5fd;margin-bottom:4px;">🏦 เงินฝาก</div>
+                            <div style="font-size:20px;font-weight:800;color:white;">฿1.25M</div>
+                            <div style="font-size:10px;color:#34d399;margin-top:2px;">↑ 5.2%</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(245,158,11,0.05));border:1px solid rgba(245,158,11,0.2);border-radius:14px;padding:14px;">
+                            <div style="font-size:10px;color:#fbbf24;margin-bottom:4px;">📋 สินเชื่อ</div>
+                            <div style="font-size:20px;font-weight:800;color:white;">฿890K</div>
+                            <div style="font-size:10px;color:#fbbf24;margin-top:2px;">15 สัญญา</div>
+                        </div>
+                        <div style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(16,185,129,0.05));border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:14px;">
+                            <div style="font-size:10px;color:#6ee7b7;margin-bottom:4px;">👥 สมาชิก</div>
+                            <div style="font-size:20px;font-weight:800;color:white;">127</div>
+                            <div style="font-size:10px;color:#34d399;margin-top:2px;">+3 เดือนนี้</div>
+                        </div>
+                    </div>
+
+                    <!-- SVG Chart -->
+                    <div style="background:rgba(255,255,255,0.03);border-radius:14px;padding:16px;">
+                        <div style="font-size:11px;color:#64748b;margin-bottom:12px;">📊 รายรับ-รายจ่ายรายเดือน</div>
+                        <svg viewBox="0 0 400 120" style="width:100%;height:auto;">
+                            <!-- Grid lines -->
+                            <line x1="0" y1="30" x2="400" y2="30" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                            <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                            <line x1="0" y1="90" x2="400" y2="90" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                            <!-- Income bars (purple gradient) -->
+                            <rect x="10" y="55" width="22" height="55" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="55" dur="1s" fill="freeze"/><animate attributeName="y" from="110" to="55" dur="1s" fill="freeze"/></rect>
+                            <rect x="44" y="30" width="22" height="80" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="80" dur="1.2s" fill="freeze"/><animate attributeName="y" from="110" to="30" dur="1.2s" fill="freeze"/></rect>
+                            <rect x="78" y="45" width="22" height="65" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="65" dur="1.1s" fill="freeze"/><animate attributeName="y" from="110" to="45" dur="1.1s" fill="freeze"/></rect>
+                            <rect x="112" y="20" width="22" height="90" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="90" dur="1.3s" fill="freeze"/><animate attributeName="y" from="110" to="20" dur="1.3s" fill="freeze"/></rect>
+                            <rect x="146" y="35" width="22" height="75" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="75" dur="1.15s" fill="freeze"/><animate attributeName="y" from="110" to="35" dur="1.15s" fill="freeze"/></rect>
+                            <rect x="180" y="15" width="22" height="95" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="95" dur="1.35s" fill="freeze"/><animate attributeName="y" from="110" to="15" dur="1.35s" fill="freeze"/></rect>
+                            <rect x="214" y="40" width="22" height="70" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="70" dur="1.1s" fill="freeze"/><animate attributeName="y" from="110" to="40" dur="1.1s" fill="freeze"/></rect>
+                            <rect x="248" y="25" width="22" height="85" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="85" dur="1.25s" fill="freeze"/><animate attributeName="y" from="110" to="25" dur="1.25s" fill="freeze"/></rect>
+                            <rect x="282" y="38" width="22" height="72" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="72" dur="1.12s" fill="freeze"/><animate attributeName="y" from="110" to="38" dur="1.12s" fill="freeze"/></rect>
+                            <rect x="316" y="10" width="22" height="100" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="100" dur="1.4s" fill="freeze"/><animate attributeName="y" from="110" to="10" dur="1.4s" fill="freeze"/></rect>
+                            <rect x="350" y="28" width="22" height="82" rx="4" fill="url(#barGrad1)" opacity="0.9"><animate attributeName="height" from="0" to="82" dur="1.22s" fill="freeze"/><animate attributeName="y" from="110" to="28" dur="1.22s" fill="freeze"/></rect>
+                            <!-- Expense bars (red) -->
+                            <rect x="18" y="75" width="14" height="35" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="35" dur="1s" fill="freeze"/><animate attributeName="y" from="110" to="75" dur="1s" fill="freeze"/></rect>
+                            <rect x="52" y="68" width="14" height="42" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="42" dur="1.2s" fill="freeze"/><animate attributeName="y" from="110" to="68" dur="1.2s" fill="freeze"/></rect>
+                            <rect x="86" y="72" width="14" height="38" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="38" dur="1.1s" fill="freeze"/><animate attributeName="y" from="110" to="72" dur="1.1s" fill="freeze"/></rect>
+                            <rect x="120" y="78" width="14" height="32" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="32" dur="1.3s" fill="freeze"/><animate attributeName="y" from="110" to="78" dur="1.3s" fill="freeze"/></rect>
+                            <rect x="154" y="74" width="14" height="36" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="36" dur="1.15s" fill="freeze"/><animate attributeName="y" from="110" to="74" dur="1.15s" fill="freeze"/></rect>
+                            <rect x="188" y="65" width="14" height="45" rx="3" fill="rgba(239,68,68,0.5)"><animate attributeName="height" from="0" to="45" dur="1.35s" fill="freeze"/><animate attributeName="y" from="110" to="65" dur="1.35s" fill="freeze"/></rect>
+                            <!-- Gradient definition -->
+                            <defs>
+                                <linearGradient id="barGrad1" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="#818cf8"/>
+                                    <stop offset="100%" stop-color="#6366f1"/>
+                                </linearGradient>
+                            </defs>
+                            <!-- Labels -->
+                            <text x="20" y="118" fill="#4b5563" font-size="8" font-family="Inter">ม.ค.</text>
+                            <text x="120" y="118" fill="#4b5563" font-size="8" font-family="Inter">เม.ย.</text>
+                            <text x="250" y="118" fill="#4b5563" font-size="8" font-family="Inter">ส.ค.</text>
+                            <text x="350" y="118" fill="#4b5563" font-size="8" font-family="Inter">พ.ย.</text>
+                        </svg>
+                    </div>
                 </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">ลิงก์</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="/login" class="text-gray-400 hover:text-white transition-colors">เข้าสู่ระบบ</a></li>
-                        <li><a href="/register" class="text-gray-400 hover:text-white transition-colors">ลงทะเบียน</a></li>
-                        <li><a href="/guide" class="text-gray-400 hover:text-white transition-colors">คู่มือการใช้งาน</a></li>
-                        <li><a href="/privacy-policy" class="text-gray-400 hover:text-white transition-colors">นโยบายความเป็นส่วนตัว</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-white font-semibold mb-4">ติดต่อ</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li>XMAN Studio</li>
-                        <li><a href="https://xman4289.com" target="_blank" class="hover:text-white transition-colors">xman4289.com</a></li>
-                        <li><a href="mailto:support@xman4289.com" class="hover:text-white transition-colors">support@xman4289.com</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-white/5 mt-8 pt-8 text-center text-sm text-gray-600">
-                &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ $appVersion }}
             </div>
         </div>
-    </footer>
+    </div>
+</section>
 
-    <script>
-    // Fade-in on scroll for browsers without x-intersect
-    if (!window.Alpine) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-    }
-    </script>
+<!-- ══════ FEATURES ══════ -->
+<section id="features" style="padding:100px 0;background:#030712;">
+    <div class="container">
+        <div style="text-align:center;margin-bottom:64px;">
+            <h2 style="font-size:36px;font-weight:800;color:white;margin-bottom:12px;">ทุกเครื่องมือที่กองทุนต้องการ</h2>
+            <p style="color:#64748b;font-size:16px;">ระบบออนไลน์ที่ออกแบบมาเพื่อกองทุนหมู่บ้านโดยเฉพาะ</p>
+            <div style="width:80px;height:4px;background:linear-gradient(90deg,#6366f1,#a855f7);border-radius:2px;margin:20px auto 0;"></div>
+        </div>
+
+        <div class="features-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+            <!-- Feature Cards with SVG Icons -->
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(99,102,241,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(99,102,241,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(99,102,241,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#818cf8" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">บันทึกบัญชี</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">บันทึกรายรับ-รายจ่าย ระบบบัญชีแยกประเภท (VFGL) งบทดลอง งบกำไรขาดทุน งบดุล ครบถ้วน</p>
+            </div>
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(16,185,129,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(16,185,129,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(16,185,129,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#34d399" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">สินเชื่อ</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">สร้างสัญญา อนุมัติ เบิกจ่าย รับชำระ ตารางผ่อนชำระอัตโนมัติ ติดตามหนี้ค้างชำระ แจ้งเตือน LINE</p>
+            </div>
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(59,130,246,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(59,130,246,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(59,130,246,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#60a5fa" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">เงินฝาก & หุ้น</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">รับฝาก-ถอนเงินสมาชิก ซื้อ-ขายหุ้น คำนวณดอกเบี้ย ดูยอดคงเหลือ ประวัติทุกรายการ</p>
+            </div>
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(139,92,246,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(139,92,246,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(139,92,246,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#a78bfa" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">รายงานการเงิน</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">งบทดลอง งบกำไรขาดทุน งบดุล บัญชีแยกประเภท ดาวน์โหลด PDF กราฟสรุปสวยงาม</p>
+            </div>
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(6,182,212,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(6,182,212,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(6,182,212,0.2),rgba(6,182,212,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#22d3ee" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">แอปมือถือ</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">สมาชิกดูยอดสินเชื่อ เงินฝาก หุ้น ผ่านแอปได้เลย อัพเดทอัตโนมัติ ใช้งานสะดวก</p>
+            </div>
+            <div class="glass hover-card" style="padding:32px;border-top:3px solid rgba(34,197,94,0.5);">
+                <div class="icon-glow" style="--glow-color:rgba(34,197,94,0.4);width:56px;height:56px;background:linear-gradient(135deg,rgba(34,197,94,0.2),rgba(34,197,94,0.05));border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+                    <svg width="28" height="28" fill="none" stroke="#4ade80" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">LINE แจ้งเตือน</h3>
+                <p style="font-size:14px;color:#94a3b8;line-height:1.7;">เชื่อมต่อ LINE OA แจ้งเตือนครบกำหนดชำระ ยืนยันฝาก-ถอน ข่าวสารกองทุน อัตโนมัติ</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════ HOW IT WORKS ══════ -->
+<section style="padding:100px 0;background:linear-gradient(180deg,#030712,#0f172a);">
+    <div class="container">
+        <div style="text-align:center;margin-bottom:64px;">
+            <h2 style="font-size:36px;font-weight:800;color:white;">เริ่มต้นง่ายใน 3 ขั้นตอน</h2>
+            <div style="width:80px;height:4px;background:linear-gradient(90deg,#6366f1,#a855f7);border-radius:2px;margin:20px auto 0;"></div>
+        </div>
+        <div class="steps-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;text-align:center;">
+            <div>
+                <div style="width:72px;height:72px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;font-weight:900;color:white;box-shadow:0 10px 30px rgba(99,102,241,0.4);">1</div>
+                <h3 style="font-size:20px;font-weight:700;color:white;margin-bottom:8px;">ลงทะเบียนกองทุน</h3>
+                <p style="color:#94a3b8;font-size:14px;">กรอกข้อมูลกองทุนและผู้ดูแล ใช้เวลาไม่ถึง 5 นาที</p>
+            </div>
+            <div>
+                <div style="width:72px;height:72px;background:linear-gradient(135deg,#8b5cf6,#a855f7);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;font-weight:900;color:white;box-shadow:0 10px 30px rgba(139,92,246,0.4);">2</div>
+                <h3 style="font-size:20px;font-weight:700;color:white;margin-bottom:8px;">ตั้งค่าข้อมูล</h3>
+                <p style="color:#94a3b8;font-size:14px;">เพิ่มชุดบัญชี บัญชีธนาคาร และสมาชิก</p>
+            </div>
+            <div>
+                <div style="width:72px;height:72px;background:linear-gradient(135deg,#a855f7,#c084fc);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;font-weight:900;color:white;box-shadow:0 10px 30px rgba(168,85,247,0.4);">3</div>
+                <h3 style="font-size:20px;font-weight:700;color:white;margin-bottom:8px;">เริ่มใช้งาน</h3>
+                <p style="color:#94a3b8;font-size:14px;">บันทึกบัญชี จัดการสินเชื่อ ดูรายงาน ได้ทันที</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════ TRUST ══════ -->
+<section style="padding:100px 0;background:#030712;">
+    <div class="container">
+        <div style="text-align:center;margin-bottom:64px;">
+            <h2 style="font-size:36px;font-weight:800;color:white;">ปลอดภัยระดับสากล</h2>
+        </div>
+        <div class="trust-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
+            <div class="glass" style="padding:32px;text-align:center;">
+                <div style="font-size:48px;margin-bottom:16px;">🛡️</div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">คุ้มครอง PDPA</h3>
+                <p style="font-size:14px;color:#94a3b8;">ปฏิบัติตามพ.ร.บ.คุ้มครองข้อมูลส่วนบุคคล ครบถ้วน</p>
+            </div>
+            <div class="glass" style="padding:32px;text-align:center;">
+                <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">เข้ารหัส AES-256</h3>
+                <p style="font-size:14px;color:#94a3b8;">ข้อมูลสำคัญเข้ารหัสระดับธนาคาร ปลอดภัยสูงสุด</p>
+            </div>
+            <div class="glass" style="padding:32px;text-align:center;">
+                <div style="font-size:48px;margin-bottom:16px;">📋</div>
+                <h3 style="font-size:18px;font-weight:700;color:white;margin-bottom:8px;">ตรวจสอบได้ทุกรายการ</h3>
+                <p style="font-size:14px;color:#94a3b8;">ระบบ Audit Log บันทึกทุกการเปลี่ยนแปลง ย้อนดูได้</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════ CTA ══════ -->
+<section style="padding:100px 0;background:linear-gradient(135deg,#1e1b4b,#312e81);">
+    <div class="container" style="text-align:center;">
+        <div class="glass-strong" style="padding:60px 40px;max-width:800px;margin:0 auto;border:1px solid rgba(99,102,241,0.3);box-shadow:0 0 60px rgba(99,102,241,0.15);">
+            <h2 style="font-size:36px;font-weight:800;color:white;margin-bottom:12px;">เริ่มบริหารกองทุนวันนี้</h2>
+            <p style="color:#a5b4fc;font-size:18px;margin-bottom:32px;">ฟรีตลอดชีพ ไม่มีค่าใช้จ่ายแอบแฝง</p>
+            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                <a href="/register" class="glow-btn" style="padding:16px 40px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;font-size:18px;font-weight:700;border-radius:16px;">ลงทะเบียนฟรี</a>
+                <a href="/guide" class="glass" style="padding:16px 40px;color:white;font-size:18px;font-weight:500;">อ่านคู่มือก่อน</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════ FOOTER ══════ -->
+<footer style="padding:60px 0;background:#030712;border-top:1px solid rgba(255,255,255,0.05);">
+    <div class="container">
+        <div class="footer-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;">
+            <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+                    <div style="width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+                        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    </div>
+                    <span style="font-weight:700;color:white;">KTB Account</span>
+                </div>
+                <p style="color:#64748b;font-size:13px;">ระบบบริหารกองทุนหมู่บ้านออนไลน์<br>โดย XMAN Studio</p>
+            </div>
+            <div>
+                <h4 style="color:white;font-weight:600;margin-bottom:16px;">ลิงก์</h4>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;">
+                    <li><a href="/login" style="color:#64748b;transition:color 0.2s;">เข้าสู่ระบบ</a></li>
+                    <li><a href="/register" style="color:#64748b;">ลงทะเบียน</a></li>
+                    <li><a href="/demo" style="color:#64748b;">ทดลองใช้งาน</a></li>
+                    <li><a href="/guide" style="color:#64748b;">คู่มือการใช้งาน</a></li>
+                    <li><a href="/privacy-policy" style="color:#64748b;">นโยบายความเป็นส่วนตัว</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color:white;font-weight:600;margin-bottom:16px;">ติดต่อ</h4>
+                <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;font-size:14px;color:#64748b;">
+                    <li>XMAN Studio</li>
+                    <li><a href="https://xman4289.com" target="_blank" style="color:#818cf8;">xman4289.com</a></li>
+                    <li><a href="mailto:support@xman4289.com" style="color:#818cf8;">support@xman4289.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,0.05);margin-top:40px;padding-top:24px;text-align:center;color:#374151;font-size:12px;">
+            &copy; {{ date('Y') }} XMAN Studio - ระบบบริหารกองทุนหมู่บ้าน v{{ $appVersion ?? '1.0.0' }}
+        </div>
+    </div>
+</footer>
+
 </body>
 </html>
