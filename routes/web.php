@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Fund\DashboardController as FundDashboardController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\SetupController;
 use Illuminate\Support\Facades\Route;
@@ -28,3 +30,13 @@ Route::get('/privacy-policy', fn () => view('privacy-policy'))->name('privacy-po
 Route::get('/guide', [GuideController::class, 'index'])->name('guide.index');
 Route::get('/guide/search', [GuideController::class, 'search'])->name('guide.search');
 Route::get('/guide/{category}/{slug}', [GuideController::class, 'show'])->name('guide.show');
+
+// Super Admin Dashboard
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+});
+
+// Fund Management Dashboard (tenant-scoped)
+Route::prefix('fund')->middleware(['auth'])->group(function () {
+    Route::get('/', [FundDashboardController::class, 'index'])->name('fund.dashboard');
+});
