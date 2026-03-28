@@ -15,6 +15,16 @@ class LineSettingsController extends Controller
     public function index()
     {
         $tenant = TenantContext::get();
+
+        // Demo mode หรือไม่มี tenant → ใช้ข้อมูลตัวอย่าง
+        if (! $tenant) {
+            $config = new LineOaConfig;
+            $webhookUrl = url('/api/line/webhook/demo');
+            $tenant = (object) ['code' => 'demo', 'name' => 'กองทุนตัวอย่าง', 'id' => 0];
+
+            return view('fund.settings.line', compact('config', 'webhookUrl', 'tenant'));
+        }
+
         $config = $tenant->lineOaConfig ?? new LineOaConfig;
         $webhookUrl = url("/api/line/webhook/{$tenant->code}");
 
