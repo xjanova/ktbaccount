@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Fund\DashboardController as FundDashboardController;
+use App\Http\Controllers\Fund\LineSettingsController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\SetupController;
 use Illuminate\Support\Facades\Route;
@@ -36,7 +37,23 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
 
-// Fund Management Dashboard (tenant-scoped)
+// Fund Management (tenant-scoped)
 Route::prefix('fund')->middleware(['auth'])->group(function () {
     Route::get('/', [FundDashboardController::class, 'index'])->name('fund.dashboard');
+
+    // Transactions (รายรับ-รายจ่าย)
+    Route::get('/transactions', fn () => view('fund.transactions.index'))->name('fund.transactions.index');
+    Route::get('/transactions/create', fn () => view('fund.transactions.create'))->name('fund.transactions.create');
+    Route::post('/transactions', fn () => back()->with('info', 'เร็วๆ นี้'))->name('fund.transactions.store');
+
+    // Loans (สินเชื่อ)
+    Route::get('/loans', fn () => view('fund.loans.index'))->name('fund.loans.index');
+
+    // Reports (รายงาน)
+    Route::get('/reports', fn () => view('fund.reports.index'))->name('fund.reports.index');
+
+    // Settings (ตั้งค่า)
+    Route::get('/settings', fn () => view('fund.settings.line'))->name('fund.settings');
+    Route::get('/settings/line', [LineSettingsController::class, 'index'])->name('fund.settings.line');
+    Route::put('/settings/line', [LineSettingsController::class, 'update'])->name('fund.settings.line.update');
 });
