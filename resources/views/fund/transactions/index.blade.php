@@ -51,7 +51,7 @@
 
         @forelse ($transactions ?? [] as $tx)
             <tr class="hover:bg-gray-800/50 transition-colors">
-                <td class="px-4 py-3 text-sm text-gray-300">{{ $tx->date->format('d/m/Y') }}</td>
+                <td class="px-4 py-3 text-sm text-gray-300">{{ $tx->transaction_date?->format('d/m/Y') ?? '-' }}</td>
                 <td class="px-4 py-3">
                     @if ($tx->type === 'income')
                         <x-badge color="green" label="รายรับ" />
@@ -63,7 +63,7 @@
                 <td class="px-4 py-3 text-sm text-right font-medium {{ $tx->type === 'income' ? 'text-green-400' : 'text-red-400' }}">
                     {{ $tx->type === 'income' ? '+' : '-' }}{{ number_format($tx->amount, 2) }}
                 </td>
-                <td class="px-4 py-3 text-sm text-gray-400">{{ $tx->account_name ?? '-' }}</td>
+                <td class="px-4 py-3 text-sm text-gray-400">{{ $tx->payment_method === 'cash' ? 'เงินสด' : 'ธนาคาร' }}</td>
                 <td class="px-4 py-3 text-center">
                     <div class="flex items-center justify-center gap-1">
                         <a href="{{ route('fund.transactions.index') }}" class="p-1.5 rounded-lg text-gray-400 hover:text-primary-400 hover:bg-gray-800 transition-colors" title="แก้ไขรายการ">

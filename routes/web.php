@@ -7,8 +7,15 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\Fund\DashboardController as FundDashboardController;
 use App\Http\Controllers\Fund\LineSettingsController;
+use App\Http\Controllers\Fund\LoanController;
+use App\Http\Controllers\Fund\MemberController;
+use App\Http\Controllers\Fund\ReportController;
+use App\Http\Controllers\Fund\SavingsController;
+use App\Http\Controllers\Fund\ShareController;
+use App\Http\Controllers\Fund\TransactionController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\SetupController;
+use App\Http\Middleware\AuthOrDemo;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -65,33 +72,50 @@ Route::prefix('admin')->middleware(['auth', 'super_admin'])->group(function () {
 });
 
 // Fund Management (tenant-scoped)
-Route::prefix('fund')->middleware(['auth'])->group(function () {
+Route::prefix('fund')->middleware([AuthOrDemo::class, 'demo'])->group(function () {
     Route::get('/', [FundDashboardController::class, 'index'])->name('fund.dashboard');
 
-    // Transactions (รายรับ-รายจ่าย)
-    Route::get('/transactions', fn () => view('fund.transactions.index'))->name('fund.transactions.index');
-    Route::get('/transactions/create', fn () => view('fund.transactions.create'))->name('fund.transactions.create');
-    Route::post('/transactions', fn () => back()->with('info', 'เร็วๆ นี้'))->name('fund.transactions.store');
+    // Transactions (รายรับ-รายจ่าย) - real controller
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('fund.transactions.index');
+    Route::get('/transactions/create', [TransactionController::class, 'create'])->name('fund.transactions.create');
+    Route::post('/transactions', [TransactionController::class, 'store'])->name('fund.transactions.store');
 
-    // Loans (สินเชื่อ)
-    Route::get('/loans', fn () => view('fund.loans.index'))->name('fund.loans.index');
+    // Loans (สินเชื่อ) - real controller
+    Route::get('/loans', [LoanController::class, 'index'])->name('fund.loans.index');
+    Route::get('/loans/create', [LoanController::class, 'create'])->name('fund.loans.create');
+    Route::post('/loans', [LoanController::class, 'store'])->name('fund.loans.store');
+    Route::get('/loans/{id}', [LoanController::class, 'show'])->name('fund.loans.show');
 
-    // Reports (รายงาน)
-    Route::get('/reports', fn () => view('fund.reports.index'))->name('fund.reports.index');
+    // Reports (รายงาน) - real controller
+    Route::get('/reports', [ReportController::class, 'index'])->name('fund.reports.index');
+    Route::get('/reports/trial-balance', [ReportController::class, 'trialBalance'])->name('fund.reports.trial-balance');
+    Route::get('/reports/income-statement', [ReportController::class, 'incomeStatement'])->name('fund.reports.income-statement');
+    Route::get('/reports/balance-sheet', [ReportController::class, 'balanceSheet'])->name('fund.reports.balance-sheet');
 
-    // Deposits (เงินฝาก)
-    Route::get('/deposits', fn () => view('fund.transactions.index'))->name('fund.deposits.index');
+    // Deposits (เงินฝาก) - real controller
+    Route::get('/deposits', [SavingsController::class, 'index'])->name('fund.deposits.index');
+    Route::get('/deposits/create', [SavingsController::class, 'create'])->name('fund.deposits.create');
+    Route::post('/deposits', [SavingsController::class, 'store'])->name('fund.deposits.store');
+    Route::post('/deposits/{id}/deposit', [SavingsController::class, 'deposit'])->name('fund.deposits.deposit');
+    Route::post('/deposits/{id}/withdraw', [SavingsController::class, 'withdraw'])->name('fund.deposits.withdraw');
 
-    // Shares (หุ้น)
-    Route::get('/shares', fn () => view('fund.transactions.index'))->name('fund.shares.index');
+    // Shares (หุ้น) - real controller
+    Route::get('/shares', [ShareController::class, 'index'])->name('fund.shares.index');
+    Route::post('/shares/buy', [ShareController::class, 'buy'])->name('fund.shares.buy');
+    Route::post('/shares/sell', [ShareController::class, 'sell'])->name('fund.shares.sell');
 
-    // Members (สมาชิก)
-    Route::get('/members', fn () => view('fund.transactions.index'))->name('fund.members.index');
+    // Members (สมาชิก) - real controller
+    Route::get('/members', [MemberController::class, 'index'])->name('fund.members.index');
+    Route::get('/members/create', [MemberController::class, 'create'])->name('fund.members.create');
+    Route::post('/members', [MemberController::class, 'store'])->name('fund.members.store');
+    Route::get('/members/{id}', [MemberController::class, 'show'])->name('fund.members.show');
+    Route::get('/members/{id}/edit', [MemberController::class, 'edit'])->name('fund.members.edit');
+    Route::put('/members/{id}', [MemberController::class, 'update'])->name('fund.members.update');
 
-    // Approvals (อนุมัติ)
+    // Approvals (อนุมัติ) - placeholder for now
     Route::get('/approvals', fn () => view('fund.transactions.index'))->name('fund.approvals.index');
 
-    // Account Sets (ชุดบัญชี)
+    // Account Sets (ชุดบัญชี) - placeholder
     Route::get('/account-sets', fn () => view('fund.transactions.index'))->name('fund.account-sets.index');
 
     // Settings (ตั้งค่า)

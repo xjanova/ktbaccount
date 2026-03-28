@@ -21,17 +21,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $id
  * @property int $tenant_id
  * @property int|null $user_id
- * @property string $member_no
+ * @property string $member_code
+ * @property string|null $title
  * @property string $first_name
  * @property string $last_name
- * @property string|null $national_id
+ * @property string|null $national_id_encrypted
  * @property string|null $phone
  * @property string|null $address
+ * @property string|null $occupation
  * @property Carbon|null $birth_date
  * @property Carbon|null $joined_date
  * @property float $membership_fee_paid
  * @property string $status
- * @property string|null $notes
+ * @property string|null $photo_path
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -43,21 +45,23 @@ class Member extends Model
     protected $fillable = [
         'tenant_id',
         'user_id',
-        'member_no',
+        'member_code',
+        'title',
         'first_name',
         'last_name',
-        'national_id',
+        'national_id_encrypted',
         'phone',
         'address',
         'birth_date',
         'joined_date',
         'membership_fee_paid',
         'status',
-        'notes',
+        'occupation',
+        'photo_path',
     ];
 
     protected $hidden = [
-        'national_id',
+        'national_id_encrypted',
     ];
 
     /**
