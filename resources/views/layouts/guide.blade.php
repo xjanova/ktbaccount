@@ -156,7 +156,7 @@
             {{-- ========== Left Sidebar ========== --}}
             @unless(isset($isIndex) && $isIndex)
             <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-                   class="fixed inset-y-0 left-0 top-16 z-50 w-[280px] bg-gray-900 border-r border-gray-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto lg:z-auto flex flex-col shrink-0">
+                   class="fixed inset-y-0 left-0 top-16 z-40 w-64 bg-gray-900 border-r border-gray-800 transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col shrink-0">
 
                 {{-- Sidebar header --}}
                 <div class="flex items-center justify-between px-5 py-4 border-b border-gray-800">
@@ -209,7 +209,7 @@
             @endunless
 
             {{-- ========== Main Content Area ========== --}}
-            <main class="flex-1 min-w-0 {{ isset($isIndex) && $isIndex ? '' : 'lg:ml-0' }}">
+            <main class="flex-1 min-w-0 {{ isset($isIndex) && $isIndex ? '' : 'lg:ml-64' }}">
                 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
                     {{-- Breadcrumb --}}

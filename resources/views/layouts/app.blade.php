@@ -18,7 +18,7 @@
 
     {{-- Sidebar --}}
     <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-           class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-primary transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto lg:z-auto flex flex-col">
+           class="fixed inset-y-0 left-0 z-50 w-52 bg-gradient-primary transform transition-transform duration-300 ease-in-out lg:translate-x-0 flex flex-col">
 
         {{-- Logo --}}
         <div class="flex items-center gap-3 px-6 py-5 border-b border-primary-800/50">
@@ -128,7 +128,7 @@
     </aside>
 
     {{-- Main content area --}}
-    <div class="lg:ml-64 min-h-screen flex flex-col">
+    <div class="lg:ml-52 min-h-screen flex flex-col">
 
         {{-- Impersonate Banner --}}
         @if(session('impersonating_tenant_id') || session('impersonating_user_id'))
