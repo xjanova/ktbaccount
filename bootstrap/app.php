@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\CheckRoleMiddleware;
+use App\Http\Middleware\DemoModeMiddleware;
 use App\Http\Middleware\RedirectIfNotSetup;
 use App\Http\Middleware\SetTenantMiddleware;
 use App\Http\Middleware\SuperAdminMiddleware;
@@ -29,6 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => CheckRoleMiddleware::class,
             'pdpa' => VerifyPdpaConsentMiddleware::class,
             'super_admin' => SuperAdminMiddleware::class,
+            'demo' => DemoModeMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

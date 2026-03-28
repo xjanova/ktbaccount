@@ -34,12 +34,20 @@ Route::get('/guide', [GuideController::class, 'index'])->name('guide.index');
 Route::get('/guide/search', [GuideController::class, 'search'])->name('guide.search');
 Route::get('/guide/{category}/{slug}', [GuideController::class, 'show'])->name('guide.show');
 
-// Demo Village (public - ทุกคนเข้าดูได้เพื่อทดสอบระบบ)
+// Demo Village (public - ทุกคนเข้าดูได้เพื่อทดสอบระบบ ไม่ต้อง login)
 Route::prefix('demo')->group(function () {
     Route::get('/', [DemoController::class, 'dashboard'])->name('demo.dashboard');
-    Route::get('/loans', [DemoController::class, 'loans'])->name('demo.loans');
-    Route::get('/members', [DemoController::class, 'members'])->name('demo.members');
-    Route::get('/reports', [DemoController::class, 'reports'])->name('demo.reports');
+    Route::get('/transactions', [DemoController::class, 'transactions'])->name('demo.transactions.index');
+    Route::get('/transactions/create', [DemoController::class, 'transactionsCreate'])->name('demo.transactions.create');
+    Route::post('/transactions', fn () => back()->with('success', 'บันทึกสำเร็จ (โหมดทดลอง - ไม่ได้บันทึกจริง)'))->name('demo.transactions.store');
+    Route::get('/loans', [DemoController::class, 'loans'])->name('demo.loans.index');
+    Route::get('/deposits', [DemoController::class, 'deposits'])->name('demo.deposits.index');
+    Route::get('/shares', [DemoController::class, 'shares'])->name('demo.shares.index');
+    Route::get('/members', [DemoController::class, 'members'])->name('demo.members.index');
+    Route::get('/reports', [DemoController::class, 'reports'])->name('demo.reports.index');
+    Route::get('/approvals', [DemoController::class, 'approvals'])->name('demo.approvals.index');
+    Route::get('/settings', [DemoController::class, 'settings'])->name('demo.settings');
+    Route::get('/account-sets', [DemoController::class, 'accountSets'])->name('demo.account-sets.index');
 });
 
 // Super Admin

@@ -19,12 +19,43 @@ class DemoController extends Controller
         return view('demo.dashboard', compact('fund', 'members', 'loans', 'transactions', 'savings'));
     }
 
+    public function transactions()
+    {
+        $fund = $this->getDemoFundData();
+        $transactions = $this->getDemoTransactions();
+
+        return view('demo.transactions', compact('fund', 'transactions'));
+    }
+
+    public function transactionsCreate()
+    {
+        $fund = $this->getDemoFundData();
+
+        return view('demo.transactions-create', compact('fund'));
+    }
+
     public function loans()
     {
         $fund = $this->getDemoFundData();
         $loans = $this->getDemoLoans();
 
         return view('demo.loans', compact('fund', 'loans'));
+    }
+
+    public function deposits()
+    {
+        $fund = $this->getDemoFundData();
+        $savings = $this->getDemoSavings();
+
+        return view('demo.deposits', compact('fund', 'savings'));
+    }
+
+    public function shares()
+    {
+        $fund = $this->getDemoFundData();
+        $members = $this->getDemoMembers();
+
+        return view('demo.shares', compact('fund', 'members'));
     }
 
     public function members()
@@ -40,6 +71,28 @@ class DemoController extends Controller
         $fund = $this->getDemoFundData();
 
         return view('demo.reports', compact('fund'));
+    }
+
+    public function approvals()
+    {
+        $fund = $this->getDemoFundData();
+        $loans = $this->getDemoLoans();
+
+        return view('demo.approvals', compact('fund', 'loans'));
+    }
+
+    public function settings()
+    {
+        $fund = $this->getDemoFundData();
+
+        return view('demo.settings', compact('fund'));
+    }
+
+    public function accountSets()
+    {
+        $fund = $this->getDemoFundData();
+
+        return view('demo.account-sets', compact('fund'));
     }
 
     // ── Demo Data ──────────────────────────────
