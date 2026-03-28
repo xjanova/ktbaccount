@@ -31,7 +31,7 @@
         </div>
 
         {{-- Card --}}
-        <div class="auth-card p-6 sm:p-8">
+        <div class="auth-card p-6 sm:p-8 overflow-hidden">
             @yield('content')
         </div>
 
