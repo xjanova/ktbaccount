@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop, 'claude/**']
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo_sqlite, xml, zip
+          coverage: none
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install NPM Dependencies
+        run: npm ci
+      - name: Build Assets
+        run: npm run build
+      - name: Prepare Environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=sqlite/' .env
+          touch database/database.sqlite
+      - name: Run Migrations
+        run: php artisan migrate --force
+      - name: Run Tests
+        run: php artisan test
+
+  code-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist
+      - name: Laravel Pint
+        run: ./vendor/bin/pint --test
+      - name: Security Audit
+        run: composer audit || true
+
+  build-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Check Build Output
+        run: |
+          if [ ! -f public_html/build/manifest.json ]; then
+            echo "Build failed: manifest.json not found"
+            exit 1
+          fi
+
+  auto-release:
+    needs: [tests, code-quality, build-assets]
+    if: github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '[skip-release]') && !contains(github.event.head_commit.author.name, 'github-actions')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Bump Version
+        id: version
+        run: |
+          CURRENT=$(cat VERSION)
+          IFS='.' read -r major minor patch <<< "$CURRENT"
+          NEW_PATCH=$((patch + 1))
+          NEW_VERSION="$major.$minor.$NEW_PATCH"
+          echo "$NEW_VERSION" > VERSION
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Bumped $CURRENT -> $NEW_VERSION"
+      - name: Commit Version Bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION
+          git commit -m "chore: bump version to ${{ steps.version.outputs.version }} [skip-release]"
+          git push
+      - name: Create Tag & Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
+          gh release create "v$VERSION" \
+            --title "v$VERSION" \
+            --generate-notes

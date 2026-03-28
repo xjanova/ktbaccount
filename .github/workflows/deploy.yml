@@ -1,0 +1,90 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+  push:
+    tags: ['v*']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+      - name: Install Dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - name: Build Production Assets
+        run: npm run build
+      - name: Create Deploy Package
+        run: |
+          tar -czf deploy.tar.gz \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='tests' \
+            --exclude='.env' \
+            --exclude='storage/logs/*' \
+            --exclude='flutter_app' \
+            .
+      - name: Upload to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: deploy.tar.gz
+          target: /tmp/ktbaccount-deploy
+      - name: Execute Deployment
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH || '/home/admin/domains/ktbaccount.xman4289.com/public_html' }}"
+            BACKUP_DIR="/tmp/ktbaccount-backup-$(date +%Y%m%d%H%M%S)"
+
+            echo "=== Creating backup ==="
+            cp -r "$DEPLOY_PATH" "$BACKUP_DIR" 2>/dev/null || true
+
+            echo "=== Extracting deployment ==="
+            cd "$DEPLOY_PATH"
+            tar -xzf /tmp/ktbaccount-deploy/deploy.tar.gz
+
+            echo "=== Post-deploy tasks ==="
+            composer install --no-dev --optimize-autoloader --no-interaction 2>/dev/null || true
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan queue:restart || true
+
+            chmod -R 775 storage bootstrap/cache
+            rm -f /tmp/ktbaccount-deploy/deploy.tar.gz
+
+            echo "=== Deploy complete ==="
+      - name: Health Check
+        run: |
+          sleep 5
+          URL="${{ secrets.APP_URL || 'https://ktbaccount.xman4289.com' }}/api/health"
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+          echo "Health check: $STATUS"
+          [ "$STATUS" = "200" ] || exit 1

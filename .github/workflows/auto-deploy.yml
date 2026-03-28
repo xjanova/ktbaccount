@@ -1,0 +1,85 @@
+name: Auto Deploy
+
+on:
+  # Auto-deploy when CI passes on main (push or merge)
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  # Manual trigger
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      (github.event_name == 'workflow_dispatch')
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP Lint Check
+        run: |
+          ERRORS=$(find app routes config -name "*.php" -exec php -l {} \; 2>&1 | grep -c "Parse error" || true)
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "Found $ERRORS PHP syntax errors!"
+            find app routes config -name "*.php" -exec php -l {} \; 2>&1 | grep "Parse error"
+            exit 1
+          fi
+          echo "All PHP files passed lint check"
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            set -e
+            DEPLOY_PATH="${{ secrets.DEPLOY_PATH }}"
+            DEPLOY_PATH="${DEPLOY_PATH:-/home/admin/domains/ktbaccount.xman4289.com}"
+            cd "${DEPLOY_PATH}"
+
+            echo "=== Pulling latest code ==="
+            git pull origin main
+
+            echo "=== Installing Composer dependencies ==="
+            composer install --no-dev --optimize-autoloader --no-interaction 2>/dev/null || \
+            composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+            echo "=== Building frontend ==="
+            if command -v npm &>/dev/null; then
+              npm ci 2>/dev/null || npm install
+              npm run build
+            fi
+
+            echo "=== Running migrations ==="
+            php artisan migrate --force
+
+            echo "=== Clearing caches ==="
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan event:cache
+
+            echo "=== Fixing permissions ==="
+            chmod -R 775 storage bootstrap/cache
+            chown -R admin:admin storage bootstrap/cache public_html 2>/dev/null || true
+
+            echo "=== Restarting queue workers ==="
+            php artisan queue:restart || true
+
+            echo "=== Deploy complete ==="
+      - name: Health Check
+        continue-on-error: true
+        run: |
+          sleep 5
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "${{ secrets.APP_URL || 'https://ktbaccount.xman4289.com' }}/api/health" --max-time 10)
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Health check passed!"
+          else
+            echo "⚠️ Health check returned: $RESPONSE (server may still be setting up)"
+          fi

@@ -1,0 +1,71 @@
+name: Release (Major/Minor)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - minor
+          - major
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Bump Version
+        id: version
+        run: |
+          CURRENT=$(cat VERSION)
+          IFS='.' read -r major minor patch <<< "$CURRENT"
+          if [ "${{ inputs.version_bump }}" = "major" ]; then
+            NEW_VERSION="$((major + 1)).0.0"
+          else
+            NEW_VERSION="$major.$((minor + 1)).0"
+          fi
+          echo "$NEW_VERSION" > VERSION
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "old_version=$CURRENT" >> $GITHUB_OUTPUT
+      - name: Update CHANGELOG
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          DATE=$(date +%Y-%m-%d)
+          TEMP=$(mktemp)
+          echo "# Changelog" > "$TEMP"
+          echo "" >> "$TEMP"
+          echo "## [$VERSION] - $DATE" >> "$TEMP"
+          echo "" >> "$TEMP"
+          echo "### Added" >> "$TEMP"
+          echo "- " >> "$TEMP"
+          echo "" >> "$TEMP"
+          echo "### Changed" >> "$TEMP"
+          echo "- " >> "$TEMP"
+          echo "" >> "$TEMP"
+          tail -n +2 CHANGELOG.md >> "$TEMP" 2>/dev/null || true
+          mv "$TEMP" CHANGELOG.md
+      - name: Commit & Tag
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add VERSION CHANGELOG.md
+          git commit -m "release: v$VERSION [skip-release]"
+          git tag "v$VERSION"
+          git push
+          git push origin "v$VERSION"
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --generate-notes
